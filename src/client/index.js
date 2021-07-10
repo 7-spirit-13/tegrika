@@ -2,11 +2,16 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Bridge from '@vkontakte/vk-bridge';
 
+import { Core, CoreProvider } from './core/Core';
+
+const core = new Core();
 
 function Root() {
 
   return (
-    <div style={{background: "white"}}>1</div>
+    <CoreProvider value={core}>
+      <div>1</div>
+    </CoreProvider>
   );
 }
 
