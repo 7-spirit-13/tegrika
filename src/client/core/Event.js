@@ -6,7 +6,8 @@ export default function Event() {
     if (!listeners.has(eventType)) {
       listeners.set(eventType, new Set());
     }
-    return listeners.get(eventType).add(listener);
+    listeners.get(eventType).add(listener);
+    return () => this.removeEventListener(eventType, listener);
   }
 
   // Удаляет слушатель

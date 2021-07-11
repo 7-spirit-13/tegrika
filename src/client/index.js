@@ -20,16 +20,16 @@ function Root() {
   });
 
   React.useEffect(() => {
-    core.Event.addEventListener("openpanel", panel);
-  }, []);
+    return core.Event.addEventListener("openpanel", panel => setState({ ...state, panel }));
+  }, [state.panel]);
 
   return (
     <CoreProvider.Provider value={core}>
-      { panels.map(panel => {
-        <div className={cs("panel", state.panel == panel.name ? "active" : "inactive")}>
-          <panel.component />
+      { panels.map(panel => (
+        <div key={panel.name} className={cs("panel", state.panel == panel.name ? "active" : "inactive")}>
+          {React.createElement(panel.component)}
         </div>
-      })
+      ))
       }
     </CoreProvider.Provider>
   );
