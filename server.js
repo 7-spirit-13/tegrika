@@ -106,7 +106,7 @@ async function creating_room(id_user_1, id_user_2){
 function search_rivals() {
   // Поиск соперников
   let user_one = '' // сюда запишем первого пользоватея
-  while(true){
+  setInterval(() => {
     for(let i = 0; i < users.length; i++){
       if(users[i].status == 'search'){
         if(user_one == ''){
@@ -132,9 +132,7 @@ function search_rivals() {
         }
       }
     }
-    // Делаю задержку в 20 миллисекунд, но по факту она не нужна
-    sleepFor(20);
-  }
+  }, 20);
 }
 
 // ИГРОВОЙ ПРОЦЕСС ИГРОВОЙ ПРОЦЕСС ИГРОВОЙ ПРОЦЕСС ИГРОВОЙ ПРОЦЕСС ИГРОВОЙ ПРОЦЕСС
@@ -153,8 +151,8 @@ function check_contact(id_room) {
         scope[i].contact += 10 // добавляю 10 миллисикунд, если контакт устанолвен. 
         // Если наберётся 5000, стоп игра
         if(scope[i].contact >= 5000){
-          io.sockets.in(scope[i].users[0].id).emit('stop-playing', {  })
-          io.sockets.in(scope[i].users[1].id).emit('stop-playing', {  })
+          io.sockets.in(scope[i].users[0].id).emit('stop-playing', { event: 'goal_achieved' })
+          io.sockets.in(scope[i].users[1].id).emit('stop-playing', { event: 'goal_achieved' })
           // Через минуту удалим комнату. Комнаты могли измениться, потому выполним поиск ещё раз
           setTimeout(() => { 
             for(let k = 0; k < scope.length; k++) {
@@ -164,6 +162,7 @@ function check_contact(id_room) {
             }
           }, 60000)
         }
+        // ВНИМАНИЕ! Нет проверки на TimeOut!!! Допишу чуть попозже. Думаю вешать таймер, который буду обнулять досрочно, либо останавливать игру.
       } else {
         // Не соприкосаются
       }
@@ -211,10 +210,10 @@ io.on('connection', socket => {
   socket.on('send-coordinates-here', data => {
     // Получение местоположения игроков
     let id_opponent = ''
-    // Сюда передать id_room, id_user, x, y
+    // Сюда передать id_room, x, y
     for(let i = 0; i < data.length; i++){
       if(scope[i].id_room == data.id_room){
-        if(scope[i].users[0].id == data.id_user){
+        if(scope[i].users[0].id == socket.id){
           scope[i].users[0].coordinates.push({ x : data.x, y : data.y})
           id_opponent = scope[i].users[1].id
         }
