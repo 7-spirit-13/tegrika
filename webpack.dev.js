@@ -3,7 +3,6 @@ const webpack = require('webpack');
 const path = require('path');
 
 module.exports = {
-  devtool: 'eval-cheap-source-map',
   mode: 'development',
   entry: {
     game: "./src/client/index.js"
