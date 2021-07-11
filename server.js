@@ -106,7 +106,7 @@ async function creating_room(id_user_1, id_user_2){
 function search_rivals() {
   // Поиск соперников
   let user_one = '' // сюда запишем первого пользоватея
-  while(true){
+  setInterval(() => {
     for(let i = 0; i < users.length; i++){
       if(users[i].status == 'search'){
         if(user_one == ''){
@@ -132,9 +132,7 @@ function search_rivals() {
         }
       }
     }
-    // Делаю задержку в 20 миллисекунд, но по факту она не нужна
-    sleepFor(20);
-  }
+  }, 20);
 }
 
 // ИГРОВОЙ ПРОЦЕСС ИГРОВОЙ ПРОЦЕСС ИГРОВОЙ ПРОЦЕСС ИГРОВОЙ ПРОЦЕСС ИГРОВОЙ ПРОЦЕСС
