@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import Bridge from '@vkontakte/vk-bridge';
 
 import { Core, CoreProvider } from './core/Core';
+import { Events } from './core/Constants';
 import { cs } from './core/Utils';
 import panels from './panels/';
 
@@ -14,7 +15,9 @@ function Root() {
   });
 
   React.useEffect(() => {
-    return core.Event.addEventListener("openpanel", panel => setState({ ...state, panel }));
+    return core.Event.addEventListener(Events.OPEN_PANEL, panel => {
+      setState({ ...state, panel });
+    });
   }, [state.panel]);
 
   return (

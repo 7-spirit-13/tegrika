@@ -16,9 +16,14 @@ export default function Event() {
     return listeners.get(eventType).delete(listener);
   }
 
-  // Создаёт событие
-  this.dispatchEvent = (eventType, options=[]) => {
+  /**
+   * Call event listeners
+   * @param {string} eventType event name
+   * @param {Array<any>} arguments arguments for listeners
+   * @returns {void}
+   */
+  this.dispatchEvent = (eventType, args=[]) => {
     if (!listeners.has(eventType)) return false;
-    listeners.get(eventType).forEach(v => v(...options));
+    listeners.get(eventType).forEach(v => v(...args));
   }
 }

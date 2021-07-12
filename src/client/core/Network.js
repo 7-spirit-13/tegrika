@@ -1,7 +1,12 @@
+import { Core } from './Core';
 import { Socket, io } from 'socket.io-client';
+import { Events } from './Constants';
 
+/**
+ * @param {Core} self
+ */
 export default function Network(self) {
-  /** @type {Soket} */
+  /** @type {Socket} */
   this.ws = null;
 
   this.requestAPI = (params) => {
@@ -17,8 +22,10 @@ export default function Network(self) {
     }).then(res => res.json());
   }
 
-  this.connect = (clb) => {
-    this.ws = io(`ws://${location.hostname}`);
-    this.ws("connect", clb);
+  this.connectWS = (clb) => {
+    this.ws = io(`ws://${location.hostname}:${location.port}`);
+    this.ws.on("connect", () => {
+      self.Event.dispatchEvent(Events.WS_CONNECTED);
+    });
   }
 }
