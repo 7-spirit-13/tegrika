@@ -4,6 +4,8 @@ import { Panel } from "./Panel";
 import { CoreProvider } from './../core/Core';
 import { Events } from './../core/Constants';
 
+import('./Preload.sass');
+
 function PreloadPanel() {
   const core = React.useContext(CoreProvider);
 
@@ -20,7 +22,12 @@ function PreloadPanel() {
   }, []);
 
   return (
-    <div>preload</div>
+    <div className="preload-container">
+      <div className="logo">
+        
+      </div>
+      
+    </div>
   )
 }
 

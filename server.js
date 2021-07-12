@@ -22,7 +22,7 @@ app.use(express.json({ limit: '1mb' }));
 // Устанавливаем корневую рендер-директорию
 // И "pug" как основной рендерер
 app.set('views',       'views' );
-app.set('view engine', 'pug');
+app.set('view engine', 'pug'   );
 
 // Виртуализация сетевых директорий
 app.use('/dist', expressStaticGzip(__dirname.concat('/dist')));

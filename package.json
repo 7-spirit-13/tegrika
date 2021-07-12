@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@vkontakte/icons": "^1.110.0",
     "@vkontakte/vk-bridge": "^2.4.2",
     "compression-webpack-plugin": "^8.0.1",
     "express": "^4.17.1",
