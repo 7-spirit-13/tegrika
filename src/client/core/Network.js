@@ -1,5 +1,8 @@
+import { Socket, io } from 'socket.io-client';
+
 export default function Network(self) {
-  this.online = () => this.requestAPI({ action: 'online' });
+  /** @type {Soket} */
+  this.ws = null;
 
   this.requestAPI = (params) => {
     // const seed = Math.random().toString(36).slice(2);
@@ -14,7 +17,8 @@ export default function Network(self) {
     }).then(res => res.json());
   }
 
-  this.uploadResource = (params) => this.requestAPI({ action: 'upload-resource', ...params })
-  this.getResources = () => this.requestAPI({ action: 'get-resources' })
-  this.deleteResources = (ids) => this.requestAPI({ action: 'delete-resources', ids })
+  this.connect = (clb) => {
+    this.ws = io(`ws://${location.hostname}`);
+    this.ws("connect", clb);
+  }
 }

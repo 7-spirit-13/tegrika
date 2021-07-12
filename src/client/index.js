@@ -8,12 +8,6 @@ import panels from './panels/';
 
 const core = new Core();
 
-function A() {
-  let app = React.useContext(CoreProvider);
-
-  return <span>1</span>;
-}
-
 function Root() {
   const [state, setState] = React.useState({
     panel: "preload"
