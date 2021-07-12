@@ -7,6 +7,9 @@ import { Events } from './core/Constants';
 import { cs } from './core/Utils';
 import panels from './panels/';
 
+import('./styles/panels.sass');
+import('./styles/components.sass');
+
 const core = new Core();
 
 function Root() {
