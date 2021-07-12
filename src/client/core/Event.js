@@ -6,7 +6,8 @@ export default function Event() {
     if (!listeners.has(eventType)) {
       listeners.set(eventType, new Set());
     }
-    return listeners.get(eventType).add(listener);
+    listeners.get(eventType).add(listener);
+    return () => this.removeEventListener(eventType, listener);
   }
 
   // Удаляет слушатель
@@ -18,8 +19,6 @@ export default function Event() {
   // Создаёт событие
   this.dispatchEvent = (eventType, options=[]) => {
     if (!listeners.has(eventType)) return false;
-    const func = new Array();
-    listeners.get(eventType).forEach(v => func.push(v));
-    func.forEach(v => v(...options));
+    listeners.get(eventType).forEach(v => v(...options));
   }
 }

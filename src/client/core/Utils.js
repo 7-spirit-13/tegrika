@@ -7,3 +7,7 @@ export function copyObj(mainObj) {
   }
   return objCopy;
 }
+
+export function cs(...classes) {
+  return classes.filter(v => v !== null).join(' ');
+}
