@@ -26,6 +26,7 @@ app.set('view engine', 'pug');
 
 // Виртуализация сетевых директорий
 app.use('/dist', expressStaticGzip(__dirname.concat('/dist')));
+app.use('/assets', expressStaticGzip(__dirname.concat('/assets')));
 
 
 app.get("/tegrika/", (req, res) => {
