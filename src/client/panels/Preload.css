@@ -1,0 +1,24 @@
+.preload-container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+  
+.preload-container > .logo {
+  width: 100%;
+  height: 20%;
+  min-height: 300px;
+  margin-bottom: 40px;
+  background: url('/assets/7.spirit.13.svg');
+  background-position: center center;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.preload-container > .Spinner {
+  width: auto;
+  height: auto;
+}

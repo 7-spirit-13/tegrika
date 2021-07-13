@@ -1,3 +1,4 @@
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Bridge from '@vkontakte/vk-bridge';
@@ -6,9 +7,6 @@ import { Core, CoreProvider } from './core/Core';
 import { Events } from './core/Constants';
 import { cs } from './core/Utils';
 import panels from './panels/';
-
-import('./styles/panels.sass');
-import('./styles/components.sass');
 
 const core = new Core();
 
@@ -23,6 +21,10 @@ function Root() {
     });
   }, [state.panel]);
 
+  React.useLayoutEffect(() => {
+    Bridge.send("VKWebAppInit");
+  });
+
   return (
     <CoreProvider.Provider value={core}>
       { panels.map(panel => (
@@ -35,5 +37,6 @@ function Root() {
   );
 }
 
-ReactDOM.render(<Root />, document.getElementById("root"));
-Bridge.send("VKWebAppInit");
+import('./styles/index.css').then(() => {
+  ReactDOM.render(<Root />, document.getElementById("root"));
+});

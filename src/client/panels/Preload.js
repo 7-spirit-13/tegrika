@@ -12,7 +12,7 @@ function PreloadPanel() {
   React.useEffect(() => {
     let removeListener = core.Event.addEventListener(Events.WS_CONNECTED, () => {
       setTimeout(() => {
-        // core.Event.dispatchEvent(Events.OPEN_PANEL, ['main']);
+        core.Event.dispatchEvent(Events.OPEN_PANEL, ['main']);
       }, 500);
     })
 

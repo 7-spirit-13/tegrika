@@ -26,27 +26,33 @@ module.exports = {
           }
         }
       },
-      {
-        test: /.s[ac]ss$/,
-        use: [
-          'style-loader',
-          'css-loader',
-          'sass-loader',
-        ]
-      },
+      // {
+      //   test: /.s[ac]ss$/,
+      //   use: [
+      //     'style-loader',
+      //     'css-loader',
+      //     'resolve-url-loader',
+      //     'sass-loader',
+      //   ]
+      // },
       {
         test: /.css$/,
         use: [
           'style-loader',
-          'css-loader'
+          {
+            loader: 'css-loader',
+            options: {
+              url: false
+            }
+          }
         ]
       },
-      {
-        test: /\.(eot|gif|svg|ttf|woff|woff2|jpg)$/,
-        use: [
-          'url-loader'
-        ]
-      }
+      // {
+      //   test: /\.(eot|gif|svg|ttf|woff|woff2|jpg)$/,
+      //   use: [
+      //     'file-loader'
+      //   ]
+      // }
     ]
   },
   plugins: [
