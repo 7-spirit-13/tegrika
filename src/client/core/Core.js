@@ -1,12 +1,10 @@
-import React from 'react';
-
 import Event from './Event';
 import FileSystem from './FileSystem';
 import StringSystem from './String';
 import Network from './Network';
 
 
-export function Core() {
+export function CoreClass() {
   this.init = function init() {
 
   };
@@ -24,4 +22,11 @@ export function Core() {
   this.Network = new Network(this);
 }
 
-export const CoreProvider = React.createContext(new Core());
+/** 
+ * @type {CoreClass}
+ * @global
+ */
+const Core = new CoreClass();
+window.CoreInstance = Core;
+
+export default Core;

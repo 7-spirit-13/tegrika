@@ -1,22 +1,21 @@
 import React from 'react';
 
-import { CoreProvider } from './../core/Core';
+import Core from '../core/Core';
 import { Events } from './../core/Constants';
 import { Panel } from "./Panel";
 
 import Spinner from './../components/Spinner';
 
 function PreloadPanel() {
-  const core = React.useContext(CoreProvider);
 
   React.useEffect(() => {
-    let removeListener = core.Event.addEventListener(Events.WS_CONNECTED, () => {
+    let removeListener = Core.Event.addEventListener(Events.WS_CONNECTED, () => {
       setTimeout(() => {
-        core.Event.dispatchEvent(Events.OPEN_PANEL, ['main']);
+        Core.Event.dispatchEvent(Events.OPEN_PANEL, ['main']);
       }, 500);
     })
 
-    core.Network.connectWS();
+    Core.Network.connectWS();
 
     return removeListener;
   }, []);

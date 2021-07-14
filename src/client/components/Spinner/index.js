@@ -16,7 +16,6 @@ const svgSpinner = ({ size }) => {
 }
 
 /**
- * 
  * @param {{
  *  size: "small" | "regular" | "large" | "medium"
  * }} props

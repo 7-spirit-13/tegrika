@@ -26,17 +26,21 @@ module.exports = {
           }
         }
       },
-      // {
-      //   test: /.s[ac]ss$/,
-      //   use: [
-      //     'style-loader',
-      //     'css-loader',
-      //     'resolve-url-loader',
-      //     'sass-loader',
-      //   ]
-      // },
       {
-        test: /.css$/,
+        test: /\.s[ac]ss$/,
+        use: [
+          'style-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              url: false
+            }
+          },
+          'sass-loader',
+        ]
+      },
+      {
+        test: /\.css$/,
         use: [
           'style-loader',
           {
@@ -50,7 +54,7 @@ module.exports = {
       // {
       //   test: /\.(eot|gif|svg|ttf|woff|woff2|jpg)$/,
       //   use: [
-      //     'file-loader'
+      //     'url-loader'
       //   ]
       // }
     ]

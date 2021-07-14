@@ -3,12 +3,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Bridge from '@vkontakte/vk-bridge';
 
-import { Core, CoreProvider } from './core/Core';
 import { Events } from './core/Constants';
 import { cs } from './core/Utils';
 import panels from './panels/';
 
-const core = new Core();
+import Core from './core/Core';
 
 function Root() {
   const [state, setState] = React.useState({
@@ -16,7 +15,7 @@ function Root() {
   });
 
   React.useEffect(() => {
-    return core.Event.addEventListener(Events.OPEN_PANEL, panel => {
+    return Core.Event.addEventListener(Events.OPEN_PANEL, panel => {
       setState({ ...state, panel });
     });
   }, [state.panel]);
@@ -26,17 +25,17 @@ function Root() {
   });
 
   return (
-    <CoreProvider.Provider value={core}>
+    <>
       { panels.map(panel => (
         <div key={panel.name} className={cs("panel", state.panel == panel.name ? "active" : "inactive")}>
           {React.createElement(panel.component)}
         </div>
       ))
       }
-    </CoreProvider.Provider>
+    </>
   );
 }
 
-import('./styles/index.css').then(() => {
+import('./styles/index.scss').then(() => {
   ReactDOM.render(<Root />, document.getElementById("root"));
 });

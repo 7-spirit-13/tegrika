@@ -1,0 +1,45 @@
+.main-panel {
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+
+  & > h1 {
+    font-size: 10vmin
+  }
+}
+
+.main-panel > .balls {
+  width: 100%;
+  height: calc(22vmin + 40px);
+  max-height: 300px;
+  display: flex;
+  justify-content: center;
+}
+
+.main-panel > .balls > .ball {
+  width: 13vmin;
+  height: 13vmin;
+  max-width: 100px;
+  max-height: 100px;
+  align-self: flex-start;
+  border-radius: 50%;
+  margin: 20px;
+}
+
+.main-panel > .balls > .ball-1 {
+  align-self: flex-start;
+  background: #6ad1ff;
+  border: 1px solid #4fa6ce;
+}
+
+.main-panel > .balls > .ball-2 {
+  align-self: flex-end;
+  background: #ffeb3b;
+  border: 1px solid #ccba1d;
+}
+
+.main-panel > h1 {
+  color: #86d045;
+}

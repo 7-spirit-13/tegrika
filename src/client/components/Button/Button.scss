@@ -1,0 +1,45 @@
+.Button {
+  box-sizing: border-box;
+  background: #9cdc39;
+  font-family: Roboto;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 7px;
+  margin: 10px;
+  cursor: pointer;
+  user-select: none;
+  padding: 0 30px;
+  min-width: 180px;
+}
+
+.Button.s-small {
+  height: 30px;
+  font-size: 12pt;
+  min-width: 150px;
+}
+
+.Button.c-primary {
+  background: $primary_bg;
+
+  &:hover {
+    background: $hover_primary_bg;
+  }
+
+  &:active {
+    background: $active_primary_bg;
+  }
+}
+
+.Button.c-secondary {
+  background: $secondary_bg;
+
+  &:hover {
+    background: $hover_secondary_bg;
+  }
+
+  &:active {
+    background: $active_secondary_bg;
+  }
+}

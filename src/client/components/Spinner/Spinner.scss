@@ -1,3 +1,5 @@
+@import '../../styles/constants.scss';
+
 @keyframes rotator {
   0% {
     transform: rotate(0deg);
@@ -13,7 +15,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--icon_outline_secondary);
+  color: $icon_outline_secondary;
 }
 
 .Spinner > .Spinner__self {
