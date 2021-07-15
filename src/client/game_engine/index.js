@@ -58,7 +58,6 @@ export class GameEngine {
 
     this.lastRenderTime = Date.now();
 
-    console.log(Date.now());
     this.render();
     this.update();
 

@@ -10,6 +10,5 @@ export class GamePlay extends GameEngine {
    */
   constructor(training=false) {
     super(GameEngine);
-    
   }
 }
