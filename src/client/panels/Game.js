@@ -6,11 +6,11 @@ import Core from '../core/Core';
 
 import { Events } from '../core/Constants';
 
-import { Game } from '../game-engine';
+import { GamePlay } from '../gameplay';
 
 function GamePanel() {
   const canvasRef = React.createRef(null);
-  const [game] = React.useState(new Game());
+  const [game] = React.useState(new GamePlay());
 
   React.useLayoutEffect(() => {
     game.setCanvas(canvasRef.current);
