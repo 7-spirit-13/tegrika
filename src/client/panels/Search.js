@@ -24,6 +24,13 @@ function SearchPanel() {
     Core.Event.dispatchEvent(Events.OPEN_PANEL, ['main']);
   }
 
+  React.useEffect(() => {
+    const t = setTimeout(() => {
+      Core.Event.dispatchEvent(Events.OPEN_PANEL, ['game']);
+    }, 1000);
+    return t;
+  });
+
   return (
     <div className="search-panel">
       <div className="title">
