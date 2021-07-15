@@ -4,7 +4,7 @@ import { Events } from './../core/Constants';
 
 import Core from '../core/Core';
 
-import Button from '../components/Button';
+import Button from '../ui/Button';
 
 function PreloadPanel() {
 

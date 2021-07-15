@@ -1,5 +1,5 @@
 import React from 'react';
-import Button from '../components/Button';
+import Button from '../ui/Button';
 
 import Core from '../core/Core';
 import { Events } from './../core/Constants';

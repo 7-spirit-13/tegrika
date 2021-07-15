@@ -4,7 +4,7 @@ import Core from '../core/Core';
 import { Events } from './../core/Constants';
 import { Panel } from "./Panel";
 
-import Spinner from './../components/Spinner';
+import Spinner from '../ui/Spinner';
 
 function PreloadPanel() {
 
