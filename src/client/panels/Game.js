@@ -6,14 +6,21 @@ import Core from '../core/Core';
 
 import { Events } from '../core/Constants';
 
+import { Game } from '../game-engine';
 
-function Game() {
+function GamePanel() {
+  const canvasRef = React.createRef(null);
+  const [game] = React.useState(new Game());
 
+  React.useLayoutEffect(() => {
+    game.setCanvas(canvasRef.current);
+    game.start();
+  }, []);
 
   return (
-    <canvas />
+    <canvas ref={ canvasRef } />
   );
 }
 
 
-export default new Panel("game", Game);
+export default new Panel("game", GamePanel);
