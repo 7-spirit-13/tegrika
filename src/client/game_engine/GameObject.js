@@ -1,12 +1,22 @@
-import Component from './Component';
+import { Component } from './Component';
 
-export default class GameObject {
+export class GameObject {
+  /**
+   * Empty set of components
+   * @type {Array<Component>}
+   */
+  components = null;
+  
   constructor() {
+    this.components = null;
+
+    // User's code
     this.init();
   }
 
-  /** @type {Set<Component>} */
-  components = null;
+  addComponent() {
+
+  }
 
   /**
    * @public

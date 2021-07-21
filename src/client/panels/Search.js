@@ -28,7 +28,7 @@ function SearchPanel() {
     const t = setTimeout(() => {
       Core.Event.dispatchEvent(Events.OPEN_PANEL, ['game']);
     }, 1000);
-    return t;
+    return () => clearTimeout(t);
   });
 
   return (

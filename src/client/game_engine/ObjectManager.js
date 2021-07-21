@@ -1,6 +1,6 @@
-import GameObject from './GameObject';
+import { GameObject } from './GameObject';
 
-export default function ObjectManager() {
+export function ObjectManager() {
   /** @type {Set<GameObject>} */
   this.entities = new Set();
 

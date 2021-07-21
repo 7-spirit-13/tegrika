@@ -1,7 +1,8 @@
-import Component from '../Component';
+import { Component, registerComponent } from '../Component';
 
-export default class Renderer extends Component {
-  
+export class Renderer extends Component {
+  // static rIndex = registerComponent();
+
   /**
    * Returns width and height of the object
    * @returns {Array<number>}
