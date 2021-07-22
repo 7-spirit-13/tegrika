@@ -9,15 +9,15 @@ export class Transform extends Component {
    * -----------------
    * 
    * Scheme:
-   * ( x(x) y(x) 0 )
-   * ( x(y) y(y) 0 )
-   * ( c_x  c_y  1 )
+   * ( x(x) y(x) )
+   * ( x(y) y(y) )
+   * ( c_x  c_y  )
    * ---------------
    * 
    * Default:
-   * ( 1 0 0 )
-   * ( 0 1 0 )
-   * ( 0 0 1 )
+   * ( 1 0 )
+   * ( 0 1 )
+   * ( 0 0 )
    * ---------------
    * 
    */
@@ -32,7 +32,7 @@ export class Transform extends Component {
   constructor() {
     super();
     this.matrix = new Float32Array(6);
-    this.matrix[0] = this.matrix[4] = this.matrix[8] = 1;
+    this.matrix[0] = this.matrix[3] = 1;
   }
 
   /**
@@ -44,3 +44,5 @@ export class Transform extends Component {
     if (y != null) matrix[5] = y;
   }
 }
+
+export const TransformInstance = new Transform();

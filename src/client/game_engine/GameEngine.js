@@ -4,7 +4,7 @@ export class GameEngine {
   /** If true, not rendering */
   paused = false;
 
-  frame_duration = 1000. / 15.;
+  frame_duration = 1000. / 5.;
 
   // Last render time
   last_render_time = 0;
@@ -40,9 +40,11 @@ export class GameEngine {
   /**
    * Drawing the objects
    * @private
+   * @param {CanvasRenderingContext2D} ctx
    */
-  render() {
-    this.scene.objects.forEach(v => v._components.forEach(v => v.render()));
+  render(ctx) {
+    ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.scene.objects.forEach(v => v._components.forEach(v => v.render(ctx)));
   }
 
   /**
@@ -54,7 +56,7 @@ export class GameEngine {
 
     this.last_render_time = Date.now();
 
-    this.render();
+    this.render(this.canvas.getContext('2d'));
     this.update();
 
     let now = Date.now();

@@ -22,17 +22,18 @@ export class GameObject {
       console.warn(`addComponent: the component is already in components list ${component}`);
       return false;
     }
+    component.gameObject = this;
     this._components.push(component);
     return true;
   }
 
   /** 
    * @template T
-   * @param {T} componentConstructor
+   * @param {T} instance
    * @returns {T}
    */
-  getComponent(componentConstructor) {
-    return this._components.find(c => c instanceof componentConstructor);
+  getComponent(instance) {
+    return this._components.find(c => c.constructor === instance.constructor);
   }
 
   removeComponent(component) {

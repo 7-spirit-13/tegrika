@@ -1,3 +1,5 @@
+import { GameObject } from "./GameObject";
+
 let c_key = 0;
 
 export function registerComponent() {
@@ -5,8 +7,17 @@ export function registerComponent() {
 }
 
 export class Component {
-  // Init
-  init(){};
+  /**
+   * @type {GameObject}
+   */
+  gameObject = null;
+
+  /**
+   * @param {GameObject} gameObject
+   */
+  constructor(gameObject) {
+    this.gameObject = gameObject;
+  }
 
   // Calculating process
   update(){};
