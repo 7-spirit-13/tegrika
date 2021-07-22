@@ -10,7 +10,7 @@ export class GamePlay extends GE.GameEngine {
    */
   constructor(training=false) {
     super();
-    let ball = new GE.GameObject();
+    const ball = GE.OBJECTS.createCamera();
     this.scene.add(ball);
     ball.addComponent(new GE.COMPONENTS.Transform());
     ball.addComponent(new GE.COMPONENTS.RENDERERS.CircleRenderer());
