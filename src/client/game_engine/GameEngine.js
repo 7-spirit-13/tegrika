@@ -1,16 +1,13 @@
-import { ObjectManager } from './ObjectManager';
-/**
- * @constructor
- * @param {HTMLCanvasElement | null} _canvas
- */
+import { Scene } from './ObjectManager';
+
 export class GameEngine {
   /** If true, not rendering */
   paused = false;
 
-  frameDuration = 1000. / 15.;
+  frame_duration = 1000. / 15.;
 
   // Last render time
-  lastRenderTime = 0;
+  last_render_time = 0;
 
   /** @type {HTMLCanvasElement} */
   canvas = null;
@@ -20,7 +17,7 @@ export class GameEngine {
 
   constructor(_canvas=null) {
     this.canvas = _canvas;
-    this.objects = new ObjectManager();
+    this.scene = new Scene();
   }
 
   /**
@@ -37,7 +34,7 @@ export class GameEngine {
    * @private
    */
   update() {
-    this.objects.entities.forEach(v => v.update());
+    this.scene.objects.forEach(v => v._components.forEach(v => v.update()));
   }
 
   /**
@@ -45,7 +42,7 @@ export class GameEngine {
    * @private
    */
   render() {
-    this.objects.entities.forEach(v => v.render());
+    this.scene.objects.forEach(v => v._components.forEach(v => v.render()));
   }
 
   /**
@@ -55,15 +52,15 @@ export class GameEngine {
   cycle() {
     if (this.paused) return;
 
-    this.lastRenderTime = Date.now();
+    this.last_render_time = Date.now();
 
     this.render();
     this.update();
 
     let now = Date.now();
-    let dif = now - this.lastRenderTime;
-    if (dif < this.frameDuration) {
-      setTimeout(this.cycle.bind(this), this.frameDuration - dif);
+    let dif = now - this.last_render_time;
+    if (dif < this.frame_duration) {
+      setTimeout(this.cycle.bind(this), this.frame_duration - dif);
     } else {
       requestAnimationFrame(this.cycle.bind(this));
     }

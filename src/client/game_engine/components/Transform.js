@@ -1,6 +1,8 @@
-import { Component } from "../Component";
+import { Component, registerComponent } from "../Component";
 
 export class Transform extends Component {
+  static rIndex = registerComponent();
+
   /**
    * @description Projection matrix
    * @type {Float32Array}
@@ -28,7 +30,17 @@ export class Transform extends Component {
   rotation = 0;
 
   constructor() {
-    this.matrix = new Float32Array(9);
+    super();
+    this.matrix = new Float32Array(6);
     this.matrix[0] = this.matrix[4] = this.matrix[8] = 1;
+  }
+
+  /**
+   * @param {Number} x
+   * @param {Number} y
+   */
+  setPosition(x, y) {
+    if (x != null) matrix[2] = x;
+    if (y != null) matrix[5] = y;
   }
 }

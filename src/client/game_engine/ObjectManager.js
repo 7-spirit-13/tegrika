@@ -1,15 +1,15 @@
 import { GameObject } from './GameObject';
 
-export function ObjectManager() {
+export function Scene() {
   /** @type {Set<GameObject>} */
-  this.entities = new Set();
+  this.objects = new Set();
 
   /**
    * Add an object
    * @param {GameObject} obj
    */
   this.add = (obj) => {
-    this.entities.add(obj);
+    this.objects.add(obj);
   }
 
   /**
@@ -17,6 +17,6 @@ export function ObjectManager() {
    * @param {GameObject} obj
    */
   this.remove = (obj) => {
-    this.entities.delete(obj);
+    this.objects.delete(obj);
   }
 }

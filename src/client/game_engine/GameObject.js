@@ -1,44 +1,48 @@
-import { Component } from './Component';
+import { Component, registerComponent } from './Component';
 
 export class GameObject {
+  // @ts-check
   /**
    * Empty set of components
    * @type {Array<Component>}
+   * @private
    */
-  components = null;
+  _components = null;
   
   constructor() {
-    this.components = null;
-
-    // User's code
-    this.init();
-  }
-
-  addComponent() {
-
+    this._components = [];
   }
 
   /**
-   * @public
-   * Init function
+   * @param {Component} component 
+   * @param {boolean} check 
    */
-  init() {
+  addComponent(component, check=true) {
+    if (check && component.prototype && this._components.some(v => v instanceof component.prototype)) {
+      console.warn(`addComponent: the component is already in components list ${component}`);
+      return false;
+    }
+    this._components.push(component);
+    return true;
+  }
+
+  /** 
+   * @template T
+   * @param {T} componentConstructor
+   * @returns {T}
+   */
+  getComponent(componentConstructor) {
+    return this._components.find(c => c instanceof componentConstructor);
+  }
+
+  removeComponent(component) {
+    let index = this._components.indexOf(component);
     
-  }
+    if (index === -1)
+      return false;
 
-  /**
-   * @public
-   * Update state of the object
-   */
-  update() {
-
-  }
-
-  /**
-   * @public
-   * Render the object on the canvas
-   */
-  render() {
-
+    this._components.splice(index, 1);
+    
+    return true;
   }
 }

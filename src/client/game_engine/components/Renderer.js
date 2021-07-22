@@ -1,7 +1,7 @@
 import { Component, registerComponent } from '../Component';
 
 export class Renderer extends Component {
-  // static rIndex = registerComponent();
+  static rIndex = registerComponent();
 
   /**
    * Returns width and height of the object

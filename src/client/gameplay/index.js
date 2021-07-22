@@ -10,6 +10,9 @@ export class GamePlay extends GE.GameEngine {
    */
   constructor(training=false) {
     super();
-    
+    let ball = new GE.GameObject();
+    this.scene.add(ball);
+    ball.addComponent(new GE.COMPONENTS.Transform());
+    console.log(ball.getComponent(GE.COMPONENTS.Transform));
   }
 }

@@ -5,6 +5,9 @@ export function registerComponent() {
 }
 
 export class Component {
+  // Init
+  init(){};
+
   // Calculating process
   update(){};
 
