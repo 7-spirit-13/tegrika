@@ -1,5 +1,9 @@
 import { Renderer } from "../Renderer";
 
+/** 
+ * @class
+ * @extends Renderer
+ */
 export class CircleRenderer extends Renderer {
   radius = 60;
   stroke_width = 2;
@@ -7,13 +11,16 @@ export class CircleRenderer extends Renderer {
   stroke_color = '#444444';
 
   /**
-   * @override
+   * @public
+   * @method
    * @param {CanvasRenderingContext2D} ctx
+   * @param {import('../../GameEngine').GlobalRenderSettings} renderSettings
+   * @returns {void}
    */
-  render(ctx) {
+  render(ctx, renderSettings) {
     // Transforming
     super.render(...arguments);
-
+    
     // Settings properties
     ctx.fillStyle = this.fill_color;
     ctx.lineWidth = this.stroke_width;

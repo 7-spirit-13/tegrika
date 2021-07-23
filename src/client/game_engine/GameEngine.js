@@ -1,5 +1,10 @@
 import { Scene } from './ObjectManager';
 
+/**
+ * @typedef {object} GlobalRenderSettings
+ * @property {number} zoom
+ */
+
 export class GameEngine {
   /** If true, not rendering */
   paused = false;
@@ -14,10 +19,18 @@ export class GameEngine {
 
   /** @type {ObjectManager} */
   objects = null;
+  
+  /**
+   * @type {GlobalRenderSettings}
+   */
+  globalRenderSettings = null;
 
   constructor(_canvas=null) {
     this.canvas = _canvas;
     this.scene = new Scene();
+
+    this.globalRenderSettings = new Object();
+    this.globalRenderSettings.zoom = 0;
   }
 
   /**
