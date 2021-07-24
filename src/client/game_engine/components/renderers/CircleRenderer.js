@@ -7,7 +7,7 @@ import { Renderer } from "../Renderer";
 export class CircleRenderer extends Renderer {
   radius = 60;
   stroke_width = 2;
-  fill_color = '#eeeeee';
+  fill_color = '#2196f3';
   stroke_color = '#444444';
 
   /**
