@@ -15,6 +15,7 @@ function GamePanel() {
 
   React.useLayoutEffect(() => {
     const canvas = canvasRef.current;
+
     game.setCanvas(canvas);
     game.start();
 

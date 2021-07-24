@@ -40,8 +40,8 @@ export class Transform extends Component {
    * @param {Number} y
    */
   setPosition(x, y) {
-    if (x != null) matrix[2] = x;
-    if (y != null) matrix[5] = y;
+    if (x != null) this.matrix[4] = x;
+    if (y != null) this.matrix[5] = y;
   }
 }
 
