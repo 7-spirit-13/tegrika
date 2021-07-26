@@ -1,4 +1,5 @@
 import { Component } from "../Component";
+import { convertCanvas2Context } from "../Utils";
 import { Collider } from "./Collider";
 
 export class Touch extends Component {
@@ -21,8 +22,9 @@ export class Touch extends Component {
    * @public
    * @param {Collider} collider
    */
-  constructor(collider) {
+  constructor(collider=null) {
     super();
+    this.collider = collider;
   }
 
   /**
@@ -31,8 +33,13 @@ export class Touch extends Component {
    */
   setOnTouchStart(clb) {
     this._touch_start_clb = clb;
+    
     this.gameObject.scene.game_engine.canvas.addEventListener("touchstart", (ev) => {
-      clb(ev);
+      const rect = this.gameObject.scene.game_engine.canvas.getBoundingClientRect();
+      const coords = convertCanvas2Context(rect, ev.touches[0].clientX - rect.x, ev.touches[0].clientY - rect.y);
+      if (this.collider.hasPoint(...coords)) {
+        clb(ev);
+      }
     });
   }
 

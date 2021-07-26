@@ -13,6 +13,9 @@ export class Component {
     this.gameObject = gameObject;
   }
 
+  // Initializing component
+  init(){};
+
   // Calculating process
   update(){};
 

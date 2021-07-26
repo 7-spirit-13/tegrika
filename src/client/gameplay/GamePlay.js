@@ -16,13 +16,13 @@ export class GamePlay {
    * @private
    * @type {GE.GameObject}
    */
-  my_ball = null;
+  other_ball = null;
 
   /**
    * @private
    * @type {GE.GameObject}
    */
-  other_ball = null;
+  main_ball = null;
 
   /**
    * @private
@@ -44,19 +44,19 @@ export class GamePlay {
   }
 
   reset() {
-    this.my_ball
+    this.other_ball
       .getComponent(GE.COMPONENTS.TransformInstance)
       .setPosition(-Constants.MAP_WIDTH / 2 + 70, Constants.MAP_HEIGHT / 2 - 70);
 
-    this.other_ball
+    this.main_ball
       .getComponent(GE.COMPONENTS.TransformInstance)
       .setPosition(Constants.MAP_WIDTH / 2 - 70, -Constants.MAP_HEIGHT / 2 + 70);
 
-    this.my_ball
+    this.other_ball
       .getComponent(GE.COMPONENTS.RENDERERS.CircleRendererInstance)
       .fill_color = 'red';
 
-    this.my_ball
+    this.other_ball
       .getComponent(GE.COMPONENTS.TransformInstance)
       .setPosition(-100, 100);
   }
@@ -67,15 +67,16 @@ export class GamePlay {
     this.game_engine.scene.add(this.map);
 
     // Creating opponent object
+    this.main_ball = GE.OBJECTS.createCircle();
+    this.game_engine.scene.add(this.main_ball);
+
+    // Creating main object
     this.other_ball = GE.OBJECTS.createCircle();
     this.game_engine.scene.add(this.other_ball);
 
-    // Creating main object
-    this.my_ball = GE.OBJECTS.createCircle();
-    this.game_engine.scene.add(this.my_ball);
-
     // Adding controls
-    this.my_ball.addComponent(new GE.COMPONENTS.Touch()).setOnTouchStart((ev) => {
+    const cr = this.main_ball.addComponent(new GE.COMPONENTS.COLLIDERS.CircleCollider());
+    this.main_ball.addComponent(new GE.COMPONENTS.Touch(cr)).setOnTouchStart((ev) => {
       console.log(ev);
     });
   }

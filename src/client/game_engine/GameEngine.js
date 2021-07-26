@@ -57,7 +57,7 @@ export class GameEngine {
    */
   render(ctx) {
     ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    this.scene.objects.forEach(v => v._components.forEach(v => v.render(ctx)));
+    this.scene.objects.forEach(v => v._components.forEach(v => v.render(ctx, this.globalRenderSettings)));
   }
 
   /**

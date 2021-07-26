@@ -32,6 +32,7 @@ export class GameObject {
     }
 
     component.gameObject = this;
+    component.init();
     this._components.push(component);
     return component;
   }
