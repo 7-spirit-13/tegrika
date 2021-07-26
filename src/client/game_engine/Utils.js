@@ -1,5 +1,6 @@
 import { Transform, TransformInstance } from "./components";
 import { GameObject } from "./GameObject";
+import { Vector2 } from "./math";
 
 /**
  * @param {GameObject} gameObject
@@ -10,11 +11,13 @@ export function getTransform(gameObject) {
 }
 
 /**
- * @param {HTMLCanvasElement | DOMRect} rect
+ * @param {HTMLCanvasElement} canvas
  * @param {number} x
  * @param {number} y
+ * @param {number} zoom
  * @returns {Array<number>}
  */
-export function convertCanvas2Context(rect, x, y) {
-  return [x - rect.width / 2, rect.height / 2 - y];
+export function convertCanvas2ContextCoords(canvas, x, y, zoom=1) {
+  const {width: w, height: h} = canvas.getBoundingClientRect();
+  return Vector2.multiplyA([x - w / 2, h / 2 - y], canvas.width / w / zoom);
 }

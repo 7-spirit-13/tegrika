@@ -1,6 +1,6 @@
 import { Component } from "../Component";
 import { Vector2 } from "../math";
-import { convertCanvas2Context } from "../Utils";
+import { convertCanvas2ContextCoords } from "../Utils";
 import { Collider } from "./Collider";
 
 export class Touch extends Component {
@@ -12,6 +12,18 @@ export class Touch extends Component {
 
   /** @private @type {function} */
   _touch_move_clb = null;
+
+  /** @private @type {function} */
+  _mouse_move_clb = null;
+
+  /** @private @type {function} */
+  _mouse_start_clb = null;
+
+  /** @private @type {function} */
+  _mouse_end_clb = null;
+
+  /** @private @type {function} */
+
 
   /** @public @readonly @type {boolean} */
   touched = false;
@@ -49,8 +61,7 @@ export class Touch extends Component {
   _getResultCoords(x, y) {
     const canvas = this.gameObject.scene.game_engine.canvas;
     const r = canvas.getBoundingClientRect();
-    const c = canvas.width / r.width;
-    return Vector2.multiplyA(convertCanvas2Context(r, x - r.x, y - r.y), c / this.gameObject.scene.game_engine.render_settings.zoom);
+    return convertCanvas2ContextCoords(canvas, x - r.x, y - r.y, this.gameObject.scene.game_engine.render_settings.zoom);
   }
 
   /**
@@ -62,7 +73,7 @@ export class Touch extends Component {
   setOnTouchStart(clb, with_mouse=false) {
     this._touch_start_clb = clb;
     
-    this.gameObject.scene.game_engine.canvas.addEventListener("touchstart", (ev) => {
+    this.gameObject.scene.game_engine.canvas.addEventListener("touchstart", this._touch_start_clb = (ev) => {
       const coords = this._getResultCoords(ev.touches[0].clientX, ev.touches[0].clientY);
       if (this.collider.hasPoint(...coords)) {
         this.touched = true;
@@ -73,7 +84,7 @@ export class Touch extends Component {
     });
 
     if (with_mouse) {
-      this.gameObject.scene.game_engine.canvas.addEventListener("mousedown", (ev) => {
+      this.gameObject.scene.game_engine.canvas.addEventListener("mousedown", this._mouse_start_clb = (ev) => {
         const coords = this._getResultCoords(ev.clientX, ev.clientY);
         if (this.collider.hasPoint(...coords)) {
           this.touched = true;
@@ -94,19 +105,19 @@ export class Touch extends Component {
    * @returns {this}
    */
   setOnTouchEnd(clb, with_mouse=false) {
-    this._touch_end_clb = (ev) => {
+    ;
+
+    this.gameObject.scene.game_engine.canvas.addEventListener("touchend", this._touch_end_clb = (ev) => {
       if (!this.touched) return;
       this.touched = false;
 
       const coords = this._getResultCoords(ev.changedTouches[0].clientX, ev.changedTouches[0].clientY);
       this.current_position = coords;
       clb(...coords);
-    };
-
-    this.gameObject.scene.game_engine.canvas.addEventListener("touchend", this._touch_end_clb);
+    });
 
     if (with_mouse) {
-      this.gameObject.scene.game_engine.canvas.addEventListener("mouseup", (ev) => {
+      this.gameObject.scene.game_engine.canvas.addEventListener("mouseup", this._mouse_end_clb = (ev) => {
         if (!this.touched) return;
         this.touched = false;
 
@@ -126,9 +137,8 @@ export class Touch extends Component {
    * @returns {this}
    */
   setOnTouchMove(clb, with_mouse=false) {
-    this._touch_move_clb = clb;
 
-    this.gameObject.scene.game_engine.canvas.addEventListener("touchmove", (ev) => {
+    this.gameObject.scene.game_engine.canvas.addEventListener("touchmove", this._touch_move_clb = (ev) => {
       if (!this.touched) return;
         const coords = this._getResultCoords(ev.touches[0].clientX, ev.touches[0].clientY);
         this.current_position = coords;
@@ -136,7 +146,7 @@ export class Touch extends Component {
     });
 
     if (with_mouse) {
-      this.gameObject.scene.game_engine.canvas.addEventListener("mousemove", (ev) => {
+      this.gameObject.scene.game_engine.canvas.addEventListener("mousemove", this._mouse_move_clb = (ev) => {
         if (!this.touched) return;
         const coords = this._getResultCoords(ev.clientX, ev.clientY);
         this.current_position = coords;
@@ -145,5 +155,12 @@ export class Touch extends Component {
     }
 
     return this;
+  }
+
+  /**
+   * Releases all event callbacks
+   */
+  destroy() {
+    const canvas = this.gameObject.scene.game_engine.canvas;
   }
 }
