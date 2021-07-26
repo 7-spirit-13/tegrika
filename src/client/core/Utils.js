@@ -13,5 +13,5 @@ export function cs(...classes) {
 }
 
 export function isIphone() {
-  return (/iPhone|iPad|iPod/i).test(window.navigator.userAgent);
+  return (/iPhone|iPad|iPod/i).test(window.navigator.userAgent) || true;
 }

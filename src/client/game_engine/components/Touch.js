@@ -49,7 +49,7 @@ export class Touch extends Component {
   _getResultCoords(x, y) {
     const canvas = this.gameObject.scene.game_engine.canvas;
     const r = canvas.getBoundingClientRect();
-    const c = r.width / canvas.width;
+    const c = canvas.width / r.width;
     return Vector2.multiplyA(convertCanvas2Context(r, x - r.x, y - r.y), c / this.gameObject.scene.game_engine.render_settings.zoom);
   }
 
