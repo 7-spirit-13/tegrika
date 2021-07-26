@@ -23,7 +23,7 @@ export default function Network(self) {
   }
 
   this.connectWS = (clb) => {
-    this.ws = io(`ws://${location.hostname}:${location.port}`);
+    this.ws = io(`ws${location.protocol == 'https' ? 's' : ''}://${location.hostname}:${location.port}`);
     this.ws.on("connect", () => {
       self.Event.dispatchEvent(Events.WS_CONNECTED);
     });

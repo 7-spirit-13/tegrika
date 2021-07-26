@@ -99,23 +99,27 @@ export class GamePlay {
     let limitCoords = ([x, y]) => {
       const E_L = 7; // Extern Limitation
 
-      const L_L = Constants.BALL_RADIUS - Constants.MAP_WIDTH / 2  + E_L; // Left Limitation
-      const L_R = Constants.MAP_WIDTH / 2 - Constants.BALL_RADIUS  - E_L; // Right Limitation
-      const L_D = Constants.BALL_RADIUS - Constants.MAP_HEIGHT / 2 + E_L; // Down Limitation
-      const L_U = Constants.MAP_HEIGHT / 2 - Constants.BALL_RADIUS - E_L; // Up Limitation
+      const L_L = -Constants.MAP_WIDTH  / 2 + Constants.BALL_RADIUS + E_L; // Left Limitation
+      const L_R =  Constants.MAP_WIDTH  / 2 - Constants.BALL_RADIUS - E_L; // Right Limitation
+      const L_D = -Constants.MAP_HEIGHT / 2 + Constants.BALL_RADIUS + E_L; // Down Limitation
+      const L_U =  Constants.MAP_HEIGHT / 2 - Constants.BALL_RADIUS - E_L; // Up Limitation
       
       return [Math.min(Math.max(x, L_L), L_R), Math.min(Math.max(y, L_D), L_U)];
     }
     this.main_ball.update = (delta) => {
       const Renderer = this.main_ball.getComponent(CircleRendererInstance);
+      
       if (touch.touched) {
+        const Vec2 = GE.Math.Vector2;
         const Transform = GE.Utils.getTransform(this.main_ball);
-        let cp = GE.Math.Vector2.sumA(mouse_offset, touch.current_position);
-        let direction = GE.Math.Vector2.substractA(cp, Transform.getPosition());
-        let distance = GE.Math.Vector2.calcDistance(direction);
+        
+        let cp = Vec2.sumA(mouse_offset, touch.current_position);
+        let direction = Vec2.substractA(cp, Transform.getPosition());
+        let distance = Vec2.calcDistance(direction);
+
         if (distance >= delta * velocity) {
-          direction = GE.Math.Vector2.normalizeA(direction);
-          Transform.setPosition(...limitCoords(GE.Math.Vector2.sumA(Transform.getPosition(), GE.Math.Vector2.multiplyA(direction, velocity * delta))));
+          direction = Vec2.normalizeA(direction);
+          Transform.setPosition(...limitCoords(Vec2.sumA(Transform.getPosition(), Vec2.multiplyA(direction, velocity * delta))));
           this.main_ball.getComponent(CircleRendererInstance).stroke_color = '#333333';
         } else {
           Transform.setPosition(...limitCoords(cp));
