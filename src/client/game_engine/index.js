@@ -3,5 +3,7 @@ export * from './GameObject';
 export * from './Scene';
 export * from './Component';
 
-export * as COMPONENTS from './components';
-export * as OBJECTS from './objects';
+export * as Math from './math';
+export * as Components from './components';
+export * as Objects from './objects';
+export * as Utils from './Utils';

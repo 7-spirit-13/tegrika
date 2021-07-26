@@ -9,6 +9,18 @@ export class Touch extends Component {
   /** @private @type {function} */
   _touch_end_clb = null;
 
+  /** @private @type {function} */
+  _touch_move_clb = null;
+
+  /** @public @readonly @type {boolean} */
+  touched = false;
+
+  /** @public @readonly @type {Array<number>} */
+  start_position = null;
+
+  /** @public @readonly @type {Array<number>} */
+  current_position = null;
+
   /** @public @type {Collider} */
   collider = null;
 
@@ -28,29 +40,107 @@ export class Touch extends Component {
   }
 
   /**
-   * @public
-   * @param {function(TouchEvent)} clb
+   * Gets converted coords
+   * @param {number} x 
+   * @param {number} y 
+   * @returns {Array<number>}
    */
-  setOnTouchStart(clb) {
-    this._touch_start_clb = clb;
-    
-    this.gameObject.scene.game_engine.canvas.addEventListener("touchstart", (ev) => {
-      const rect = this.gameObject.scene.game_engine.canvas.getBoundingClientRect();
-      const coords = convertCanvas2Context(rect, ev.touches[0].clientX - rect.x, ev.touches[0].clientY - rect.y);
-      if (this.collider.hasPoint(...coords)) {
-        clb(ev);
-      }
-    });
+  _getResultCoords(x, y) {
+    const r = this.gameObject.scene.game_engine.canvas.getBoundingClientRect();
+    return convertCanvas2Context(r, x - r.x, y - r.y);
   }
 
   /**
    * @public
-   * @param {function(TouchEvent)} clb
+   * @param {function(number, number)} clb
+   * @param {boolean} with_mouse
+   * @returns {this}
    */
-  setOnTouchEnd(clb) {
-    this._touch_end_clb = clb;
-    this.gameObject.scene.game_engine.canvas.addEventListener("touchend", (ev) => {
-      clb(ev);
+  setOnTouchStart(clb, with_mouse=false) {
+    this._touch_start_clb = clb;
+    
+    this.gameObject.scene.game_engine.canvas.addEventListener("touchstart", (ev) => {
+      const coords = this._getResultCoords(ev.touches[0].clientX, ev.touches[0].clientY);
+      if (this.collider.hasPoint(...coords)) {
+        this.touched = true;
+        this.start_position = coords;
+        this.current_position = coords;
+        clb(...coords);
+      }
     });
+
+    if (with_mouse) {
+      this.gameObject.scene.game_engine.canvas.addEventListener("mousedown", (ev) => {
+        const coords = this._getResultCoords(ev.clientX, ev.clientY);
+        if (this.collider.hasPoint(...coords)) {
+          this.touched = true;
+          this.start_position = coords;
+          this.current_position = coords;
+          clb(...coords);
+        }
+      });
+    }
+
+    return this;
+  }
+
+  /**
+   * @public
+   * @param {function(number, number)} clb
+   * @param {boolean} with_mouse
+   * @returns {this}
+   */
+  setOnTouchEnd(clb, with_mouse=false) {
+    this._touch_end_clb = (ev) => {
+      if (!this.touched) return;
+      this.touched = false;
+
+      const coords = this._getResultCoords(ev.changedTouches[0].clientX, ev.changedTouches[0].clientY);
+      this.current_position = coords;
+      clb(...coords);
+    };
+
+    this.gameObject.scene.game_engine.canvas.addEventListener("touchend", this._touch_end_clb);
+
+    if (with_mouse) {
+      this.gameObject.scene.game_engine.canvas.addEventListener("mouseup", (ev) => {
+        if (!this.touched) return;
+        this.touched = false;
+
+        const coords = this._getResultCoords(ev.clientX, ev.clientY);
+        this.current_position = coords;
+        clb(...coords);
+      });
+    }
+
+    return this;
+  }
+
+  /**
+   * @public
+   * @param {function(number, number)} clb
+   * @param {boolean} with_mouse
+   * @returns {this}
+   */
+  setOnTouchMove(clb, with_mouse=false) {
+    this._touch_move_clb = clb;
+
+    this.gameObject.scene.game_engine.canvas.addEventListener("touchmove", (ev) => {
+      if (!this.touched) return;
+        const coords = this._getResultCoords(ev.touches[0].clientX, ev.touches[0].clientY);
+        this.current_position = coords;
+        clb(...coords);
+    });
+
+    if (with_mouse) {
+      this.gameObject.scene.game_engine.canvas.addEventListener("mousemove", (ev) => {
+        if (!this.touched) return;
+        const coords = this._getResultCoords(ev.clientX, ev.clientY);
+        this.current_position = coords;
+        clb(...coords);
+      });
+    }
+
+    return this;
   }
 }

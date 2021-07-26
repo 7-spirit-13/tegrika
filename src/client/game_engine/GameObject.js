@@ -56,4 +56,21 @@ export class GameObject {
     
     return true;
   }
+
+  /**
+   * @public
+   * @method
+   * @param {number} delta
+   * @returns {void}
+   */
+  update(delta) {}
+
+  /**
+   * @public
+   * @method
+   * @param {CanvasRenderingContext2D} ctx
+   * @param {import('../GameEngine').GlobalRenderSettings} renderSettings
+   * @returns {void}
+   */
+  render(ctx, renderSettings) {}
 }

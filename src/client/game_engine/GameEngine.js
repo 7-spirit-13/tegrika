@@ -9,10 +9,17 @@ export class GameEngine {
   /** If true, not rendering */
   paused = false;
 
-  frame_duration = 1000. / 5.;
+  frame_duration = 1000. / 60.;
 
-  // Last render time
-  last_render_time = 0;
+  /**
+   * @type {number}
+   */
+  _last_render_time = 0;
+
+  /**
+   * @type {number}
+   */
+  _last_update_time = 0;
 
   /** @type {HTMLCanvasElement} */
   canvas = null;
@@ -26,6 +33,7 @@ export class GameEngine {
   globalRenderSettings = null;
 
   constructor(_canvas=null) {
+    this._last_update_time = Date.now();
     this.canvas = _canvas;
     this.scene = new Scene();
     this.scene.game_engine = this;
@@ -46,8 +54,11 @@ export class GameEngine {
    * Updates the objects
    * @private
    */
-  update() {
-    this.scene.objects.forEach(v => v._components.forEach(v => v.update()));
+  update(delta) {
+    this.scene.objects.forEach(obj => {
+      if (obj.update) obj.update(delta);
+      obj._components.forEach(c => c.update(delta))
+    });
   }
 
   /**
@@ -56,8 +67,13 @@ export class GameEngine {
    * @param {CanvasRenderingContext2D} ctx
    */
   render(ctx) {
+    ctx.resetTransform();
     ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    this.scene.objects.forEach(v => v._components.forEach(v => v.render(ctx, this.globalRenderSettings)));
+    
+    this.scene.objects.forEach(obj => {
+      if (obj.render) obj.render(ctx, this.globalRenderSettings);
+      obj._components.forEach(c => c.render(ctx, this.globalRenderSettings))
+    });
   }
 
   /**
@@ -67,13 +83,14 @@ export class GameEngine {
   cycle() {
     if (this.paused) return;
 
-    this.last_render_time = Date.now();
-
+    this._last_render_time = Date.now();
     this.render(this.canvas.getContext('2d'));
-    this.update();
+    
+    this.update(Date.now() - this.last_update_time);
+    this.last_update_time = Date.now();
 
     let now = Date.now();
-    let dif = now - this.last_render_time;
+    let dif = now - this._last_render_time;
     if (dif < this.frame_duration) {
       setTimeout(this.cycle.bind(this), this.frame_duration - dif);
     } else {
