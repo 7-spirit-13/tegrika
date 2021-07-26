@@ -30,7 +30,7 @@ export class GameEngine {
   /**
    * @type {GlobalRenderSettings}
    */
-  globalRenderSettings = null;
+  render_settings = null;
 
   constructor(_canvas=null) {
     this._last_update_time = Date.now();
@@ -38,8 +38,8 @@ export class GameEngine {
     this.scene = new Scene();
     this.scene.game_engine = this;
 
-    this.globalRenderSettings = new Object();
-    this.globalRenderSettings.zoom = 0;
+    this.render_settings = new Object();
+    this.render_settings.zoom = 0;
   }
 
   /**
@@ -71,8 +71,8 @@ export class GameEngine {
     ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     
     this.scene.objects.forEach(obj => {
-      if (obj.render) obj.render(ctx, this.globalRenderSettings);
-      obj._components.forEach(c => c.render(ctx, this.globalRenderSettings))
+      if (obj.render) obj.render(ctx, this.render_settings);
+      obj._components.forEach(c => c.render(ctx, this.render_settings))
     });
   }
 

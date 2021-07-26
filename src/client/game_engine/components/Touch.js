@@ -1,4 +1,5 @@
 import { Component } from "../Component";
+import { Vector2 } from "../math";
 import { convertCanvas2Context } from "../Utils";
 import { Collider } from "./Collider";
 
@@ -47,7 +48,7 @@ export class Touch extends Component {
    */
   _getResultCoords(x, y) {
     const r = this.gameObject.scene.game_engine.canvas.getBoundingClientRect();
-    return convertCanvas2Context(r, x - r.x, y - r.y);
+    return Vector2.multiplyA(convertCanvas2Context(r, x - r.x, y - r.y), 1 / this.gameObject.scene.game_engine.render_settings.zoom);
   }
 
   /**

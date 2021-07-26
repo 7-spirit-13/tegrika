@@ -54,11 +54,17 @@ export class GamePlay {
       .setPosition(Constants.MAP_WIDTH / 2 - 70, -Constants.MAP_HEIGHT / 2 + 70);
 
     this.other_ball
-      .getComponent(GE.Components.RENDERERS.CircleRendererInstance)
+      .getComponent(GE.Components.Renderers.CircleRendererInstance)
       .fill_color = 'red';
   }
 
+  updateSize() {
+    const {width: w, height: h} = this.canvas.getBoundingClientRect();
+    this.game_engine.render_settings.zoom = Math.min((w - 20) / Constants.MAP_WIDTH, (h - 30) / Constants.MAP_HEIGHT);
+  }
+
   initScene() {
+
     // Creating map
     this.map = GE.Objects.createRect(Constants.MAP_WIDTH, Constants.MAP_HEIGHT);
     this.game_engine.scene.add(this.map);
@@ -71,8 +77,15 @@ export class GamePlay {
     this.main_ball = GE.Objects.createCircle();
     this.game_engine.scene.add(this.main_ball);
 
+    this.main_ball.getComponent(GE.Components.Renderers.CircleRendererInstance)
+      .radius = Constants.BALL_RADIUS;
+
+    
+    this.other_ball.getComponent(GE.Components.Renderers.CircleRendererInstance)
+      .radius = Constants.BALL_RADIUS;
+
     // Adding controls
-    const cr = this.main_ball.addComponent(new GE.Components.COLLIDERS.CircleCollider());
+    const cr = this.main_ball.addComponent(new GE.Components.Colliders.CircleCollider());
 
     let mouse_offset = [0, 0];
     let touch = this.main_ball.addComponent(new GE.Components.Touch(cr))
@@ -130,7 +143,10 @@ export class GamePlay {
     const ctx = canvas.getContext('2d');
     ctx.imageSmoothingEnabled = true;
 
+    this.updateSize();
     this.initScene();
     this.reset();
+
+    window.addEventListener('resize', this.updateSize.bind(this));
   }
 }

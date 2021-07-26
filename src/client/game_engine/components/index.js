@@ -2,5 +2,5 @@ export * from './Renderer';
 export * from './Transform';
 export * from './Touch';
 
-export * as RENDERERS from './renderers';
-export * as COLLIDERS from './colliders';
+export * as Renderers from './renderers';
+export * as Colliders from './colliders';
