@@ -11,3 +11,7 @@ export function copyObj(mainObj) {
 export function cs(...classes) {
   return classes.filter(v => v !== null).join(' ');
 }
+
+export function isIphone() {
+  return (/iPhone|iPad|iPod/i).test(window.navigator.userAgent);
+}

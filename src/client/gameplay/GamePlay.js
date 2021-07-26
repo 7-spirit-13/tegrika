@@ -1,3 +1,4 @@
+import { isIphone } from '../core/Utils';
 import * as GE from '../game_engine';
 import { CircleRendererInstance } from '../game_engine/components/renderers';
 
@@ -21,6 +22,12 @@ export class GamePlay {
 
   /**
    * @private
+   * @type {boolean}
+   */
+   _is_iphone = false;
+
+  /**
+   * @private
    * @type {GE.GameObject}
    */
   main_ball = null;
@@ -39,9 +46,15 @@ export class GamePlay {
 
   /**
    * @param {boolean} training training mode
+   * @param {boolean} retina_ready training mode
    */
-  constructor(training=false) {
+  constructor(training=false, retina_ready=false) {
     this.game_engine = new GE.GameEngine;
+    this.retina_ready = retina_ready;
+
+    if (retina_ready) {
+      this._is_iphone = isIphone();
+    }
   }
 
   reset() {
@@ -60,7 +73,7 @@ export class GamePlay {
 
   updateSize() {
     const {width: w, height: h} = this.canvas.getBoundingClientRect();
-    this.game_engine.render_settings.zoom = Math.min((w - 20) / Constants.MAP_WIDTH, (h - 30) / Constants.MAP_HEIGHT);
+    this.game_engine.render_settings.zoom = (1 + this._is_iphone) * Math.min((w - 20) / Constants.MAP_WIDTH, (h - 30) / Constants.MAP_HEIGHT);
   }
 
   initScene() {
