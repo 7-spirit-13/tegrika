@@ -1,2 +1,1 @@
-export * from './native';
-export * from './babylon';
+export * from './GamePlay';

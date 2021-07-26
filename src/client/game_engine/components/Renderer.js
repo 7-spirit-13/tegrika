@@ -1,4 +1,4 @@
-import { Component, registerComponent } from '../Component';
+import { Component } from '../Component';
 import { TransformInstance } from './Transform';
 
 
@@ -11,7 +11,6 @@ import { TransformInstance } from './Transform';
  * @class
  */
 export class Renderer extends Component {
-  static rIndex = registerComponent();
 
   /**
    * Returns width and height of the object

@@ -1,6 +1,6 @@
 export * from './GameEngine';
 export * from './GameObject';
-export * from './ObjectManager';
+export * from './Scene';
 export * from './Component';
 
 export * as COMPONENTS from './components';

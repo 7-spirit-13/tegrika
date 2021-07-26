@@ -1,7 +1,6 @@
-import { Component, registerComponent } from "../Component";
+import { Component } from "../Component";
 
 export class Transform extends Component {
-  static rIndex = registerComponent();
 
   /**
    * @description Projection matrix

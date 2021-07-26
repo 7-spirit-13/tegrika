@@ -1,30 +1,39 @@
-import { Component, registerComponent } from './Component';
+import { Component } from './Component';
+import { Scene } from './Scene';
 
 export class GameObject {
-  // @ts-check
   /**
    * Empty set of components
    * @type {Array<Component>}
    * @private
    */
   _components = null;
-  
+
+  /**
+   * @public
+   * @type {Scene}
+   */
+  scene = null;
+
   constructor() {
     this._components = [];
   }
 
   /**
-   * @param {Component} component 
-   * @param {boolean} check 
+   * @template T
+   * @param {T} component 
+   * @param {boolean} check
+   * @returns {T}
    */
   addComponent(component, check=true) {
     if (check && component.prototype && this._components.some(v => v instanceof component.prototype)) {
       console.warn(`addComponent: the component is already in components list ${component}`);
-      return false;
+      return null;
     }
+
     component.gameObject = this;
     this._components.push(component);
-    return true;
+    return component;
   }
 
   /** 

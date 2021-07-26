@@ -1,4 +1,4 @@
-import { Scene } from './ObjectManager';
+import { Scene } from './Scene';
 
 /**
  * @typedef {object} GlobalRenderSettings
@@ -17,8 +17,8 @@ export class GameEngine {
   /** @type {HTMLCanvasElement} */
   canvas = null;
 
-  /** @type {ObjectManager} */
-  objects = null;
+  /** @type {Scene} */
+  scene = null;
   
   /**
    * @type {GlobalRenderSettings}
@@ -28,6 +28,7 @@ export class GameEngine {
   constructor(_canvas=null) {
     this.canvas = _canvas;
     this.scene = new Scene();
+    this.scene.game_engine = this;
 
     this.globalRenderSettings = new Object();
     this.globalRenderSettings.zoom = 0;
@@ -39,7 +40,6 @@ export class GameEngine {
    */
   setCanvas = (newCanvas) => {
     this.canvas = newCanvas;
-    this.canvas.getContext('2d');
   }
 
   /**

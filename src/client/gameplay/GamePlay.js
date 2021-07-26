@@ -5,7 +5,7 @@ import * as Constants from './constants';
 /**
  * Abstract layer over engine
  */
-export class NativeGamePlay {
+export class GamePlay {
   /**
    * @private
    * @type {HTMLCanvasElement}
@@ -41,23 +41,9 @@ export class NativeGamePlay {
    */
   constructor(training=false) {
     this.game_engine = new GE.GameEngine;
-    this.reset();
   }
 
   reset() {
-    this.map = GE.OBJECTS.createRect(Constants.MAP_WIDTH, Constants.MAP_HEIGHT);
-    this.game_engine.scene.add(this.map);
-
-    this.other_ball = GE.OBJECTS.createCircle();
-    this.game_engine.scene.add(this.other_ball);
-
-    this.my_ball = GE.OBJECTS.createCircle();
-    this.game_engine.scene.add(this.my_ball);
-
-    this.my_ball.getComponent(GE.COMPONENTS.TransformInstance).setPosition(-100, 100);
-    const renderer = this.my_ball.getComponent(GE.COMPONENTS.RENDERERS.CircleRendererInstance);
-    renderer.fill_color = 'red';
-
     this.my_ball
       .getComponent(GE.COMPONENTS.TransformInstance)
       .setPosition(-Constants.MAP_WIDTH / 2 + 70, Constants.MAP_HEIGHT / 2 - 70);
@@ -65,6 +51,33 @@ export class NativeGamePlay {
     this.other_ball
       .getComponent(GE.COMPONENTS.TransformInstance)
       .setPosition(Constants.MAP_WIDTH / 2 - 70, -Constants.MAP_HEIGHT / 2 + 70);
+
+    this.my_ball
+      .getComponent(GE.COMPONENTS.RENDERERS.CircleRendererInstance)
+      .fill_color = 'red';
+
+    this.my_ball
+      .getComponent(GE.COMPONENTS.TransformInstance)
+      .setPosition(-100, 100);
+  }
+
+  initScene() {
+    // Creating map
+    this.map = GE.OBJECTS.createRect(Constants.MAP_WIDTH, Constants.MAP_HEIGHT);
+    this.game_engine.scene.add(this.map);
+
+    // Creating opponent object
+    this.other_ball = GE.OBJECTS.createCircle();
+    this.game_engine.scene.add(this.other_ball);
+
+    // Creating main object
+    this.my_ball = GE.OBJECTS.createCircle();
+    this.game_engine.scene.add(this.my_ball);
+
+    // Adding controls
+    this.my_ball.addComponent(new GE.COMPONENTS.Touch()).setOnTouchStart((ev) => {
+      console.log(ev);
+    });
   }
 
   start() {
@@ -78,7 +91,12 @@ export class NativeGamePlay {
   setCanvas(canvas) {
     this.game_engine.setCanvas(canvas);
     this.canvas = canvas;
+
+    // Antialiasing
     const ctx = canvas.getContext('2d');
     ctx.imageSmoothingEnabled = true;
+
+    this.initScene();
+    this.reset();
   }
 }

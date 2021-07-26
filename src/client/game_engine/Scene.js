@@ -1,22 +1,32 @@
+import { GameEngine } from './GameEngine';
 import { GameObject } from './GameObject';
 
-export function Scene() {
+export class Scene {
   /** @type {Set<GameObject>} */
-  this.objects = new Set();
+  objects = null;
+
+  /** @type {GameEngine} */
+  game_engine = null;
+
+  constructor() {
+    this.objects = new Set();
+  }
 
   /**
    * Add an object
    * @param {GameObject} obj
    */
-  this.add = (obj) => {
+  add(obj) {
     this.objects.add(obj);
+    obj.scene = this;
   }
 
   /**
    * Delete an object
    * @param {GameObject} obj
    */
-  this.remove = (obj) => {
+  remove(obj) {
     this.objects.delete(obj);
+    obj.scene = null;
   }
 }
