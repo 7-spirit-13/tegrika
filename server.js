@@ -99,9 +99,15 @@ async function creating_room(id_user_1, id_user_2){
       }
     ]
   })
+  console.log('\nКОМНАТА СОЗДАНА.\nid_room: '+id_room+'\nid_user_1: '+id_user_1+'\nid_user_2: '+id_user_2+'\n')
+  // Время, во сколько начинаем игру
+  let time_to_start = new Date()
+  let secund = 3
+  // Добавляем + 3 секунды к текущему времени - ровно в это время игра должна запуститься
+  time_to_start.setDate(this.today.getSeconds() + secund)
   // Всё готово для игры, отправляю инфу обоим игрокам
-  io.sockets.in(id_user_1).emit('start-playing', { id_room: id_room, role: 'runaway' }) // убегающий
-  io.sockets.in(id_user_2).emit('start-playing', { id_room: id_room, role: 'overtake' }) // догоняющий
+  io.sockets.in(id_user_1).emit('start-playing', { id_room: id_room, role: 'runaway', time_to_start: time_to_start, text: 'Всё готов для игры. Ваша задача УБЕГАТЬ.\nИгра начнётся через '+secund+' секунды' }) // убегающий
+  io.sockets.in(id_user_2).emit('start-playing', { id_room: id_room, role: 'overtake', time_to_start: time_to_start, text: 'Всё готов для игры. Ваша задача ДОГОНЯТЬ соперника.\nИгра начнётся через '+secund+' секунды' }) // догоняющий
 }
 
 function search_rivals() {
@@ -185,7 +191,7 @@ io.on('connection', socket => {
     // Подключение нового пользователя. Когда он открыл игру
     console.log('Подключился игрок с id: ', socket.id)
     users.push({ id: [socket.id], status: '' })
-    return socket.emit('authorization', { msg: 'success', id: socket.id })
+    return socket.emit('authorization', { msg: 'success', id: socket.id, text: 'Успешная авторизация' })
     // Получив ответ нужно вызвать find-me-an-opponent
   })
 
@@ -208,7 +214,7 @@ io.on('connection', socket => {
         break
       }
     }
-    return socket.emit('find-me-an-opponent', { msg: 'success' })
+    return socket.emit('find-me-an-opponent', { msg: 'success', text: 'Вы зашли в игру, теперь ожидаем подключения соперника' })
     // Теперь нужно ждать, когда появится соперник. Ответ придёт в start-playing
   })
 
