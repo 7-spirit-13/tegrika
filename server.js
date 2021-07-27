@@ -110,36 +110,45 @@ async function creating_room(id_user_1, id_user_2){
   io.sockets.in(id_user_2).emit('start-playing', { id_room: id_room, role: 'overtake', time_to_start: time_to_start, text: 'Всё готов для игры. Ваша задача ДОГОНЯТЬ соперника.\nИгра начнётся через '+secund+' секунды' }) // догоняющий
 }
 
+var user_one = '' // сюда запишем первого пользоватея
+
 function search_rivals() {
   // Поиск соперников
-  let user_one = '' // сюда запишем первого пользоватея
-  setInterval(() => {
+  
     for(let i = 0; i < users.length; i++){
       if(users[i].status == 'search'){
         if(user_one == ''){
           users[i].status == 'waiting'
           user_one = users[i].id
+          continue
         } else {
-          users[i].status = 'playing'
-          let successfully_found = false // проверяем, не вышел ли пользователь, который уже находится в ожидании
-          for(let j = 0; j < users.length; j++){
-            if(user_one == users[j].id) {
-              users[j].status = 'playing'
-              successfully_found = true
-              break
+
+            users[i].status = 'playing'
+            let successfully_found = false // проверяем, не вышел ли пользователь, который уже находится в ожидании
+            for(let j = 0; j < users.length; j++){
+              if(user_one == users[j].id) {
+                users[j].status = 'playing'
+                successfully_found = true
+                break
+              }
             }
-          }
-          if(successfully_found == false){
-            // не нашли пользователя, который был в ожидании, удалим его
-            user_one = users[i].id
-          } else {
-            creating_room(user_one, users[i].id)
-            user_one = ''
-          }
+            if(successfully_found == false){
+              // не нашли пользователя, который был в ожидании, удалим его, точнее перезапишем
+              user_one = users[i].id
+              continue
+            } else {
+              creating_room(user_one, users[i].id)
+              user_one = ''
+            }
+
         }
       }
     }
-  }, 20);
+
+  // Вызовем эту функцию повторно 
+  setInterval(() => {
+    search_rivals();
+  }, 80);
 }
 
 // ИГРОВОЙ ПРОЦЕСС ИГРОВОЙ ПРОЦЕСС ИГРОВОЙ ПРОЦЕСС ИГРОВОЙ ПРОЦЕСС ИГРОВОЙ ПРОЦЕСС
