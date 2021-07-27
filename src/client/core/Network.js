@@ -39,13 +39,23 @@ export default function Network(self) {
 
   this.findOpponent = () => {
     return new Promise((resolve, reject) => {
-      const clb = data => {
-        if (data.msg == 'success') {
-          resolve(data);
-        } else {
-          reject();
-        }
+      let clb = data => {
+        // Deleting old
         this.ws.off("find-me-an-opponent", clb);
+
+        if (data.msg == 'success') {
+          clb = (data) => {
+          // Deleting old callback
+            this.ws.off("start-playing", clb);
+
+            console.log(data);
+            resolve(data);
+          }
+
+          this.ws.on("start-playing", clb);
+        } else {
+          reject("find-me-an-opponent error");
+        }
       }
       this.ws.emit("find-me-an-opponent").on("find-me-an-opponent", clb);
     });
