@@ -118,7 +118,7 @@ function search_rivals() {
     for(let i = 0; i < users.length; i++){
       if(users[i].status == 'search'){
         if(user_one == ''){
-          users[i].status == 'waiting'
+          users[i].status = 'waiting'
           user_one = users[i].id
           continue
         } else {
@@ -210,6 +210,20 @@ io.on('connection', socket => {
       if (users[i].id == socket.id) {
         console.log('Игрок с id: ', socket.id, ' покинул игру')
         users = remove(users, i)
+        // Если этот игрок был в игре, то закроем игру досрочно
+        for(let j = 0; j < scope.length; j++){
+          if(scope[j].users[0].id == socket.id || scope[j].users[1].id == socket.id){
+            let recipient = ''
+            if(scope[j].users[1].id == socket.id)
+              recipient = scope[j].users[0].id
+            else
+              recipient = scope[j].users[1].id
+            console.log('Удаляю комнату id:'+scope[j].id_room+', соперник вышел')
+            io.sockets.in(recipient).emit('stop-playing', { event: 'rival_left', text: 'Соперник покинул игру' })
+            // Удаляю комнату
+            scope = remove(scope, j)
+          }
+        }
       }
     }
   })
