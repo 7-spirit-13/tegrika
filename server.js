@@ -104,7 +104,7 @@ async function creating_room(id_user_1, id_user_2){
   let time_to_start = new Date()
   let secund = 3
   // Добавляем + 3 секунды к текущему времени - ровно в это время игра должна запуститься
-  time_to_start.setDate(this.time_to_start.getSeconds() + secund)
+  time_to_start.setDate(time_to_start.getSeconds() + secund)
   // Всё готово для игры, отправляю инфу обоим игрокам
   io.sockets.in(id_user_1).emit('start-playing', { id_room: id_room, role: 'runaway', time_to_start: time_to_start, text: 'Всё готов для игры. Ваша задача УБЕГАТЬ.\nИгра начнётся через '+secund+' секунды' }) // убегающий
   io.sockets.in(id_user_2).emit('start-playing', { id_room: id_room, role: 'overtake', time_to_start: time_to_start, text: 'Всё готов для игры. Ваша задача ДОГОНЯТЬ соперника.\nИгра начнётся через '+secund+' секунды' }) // догоняющий
