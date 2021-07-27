@@ -145,8 +145,8 @@ function search_rivals() {
       }
     }
 
-  // Вызовем эту функцию повторно 
-  setInterval(() => {
+  // Вызываю эту функцию повторно 
+  setTimeout(() => {
     search_rivals();
   }, 80);
 }
