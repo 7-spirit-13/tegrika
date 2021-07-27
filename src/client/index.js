@@ -11,12 +11,14 @@ import Core from './core/Core';
 
 function Root() {
   const [state, setState] = React.useState({
-    panel: "preload"
+    panel: "preload",
+    panel_props: {}
   });
 
   React.useEffect(() => {
-    return Core.Event.addEventListener(Events.OPEN_PANEL, panel => {
-      setState({ ...state, panel });
+    return Core.Event.addEventListener(Events.OPEN_PANEL, (panel, panel_props) => {
+      console.log(panel_props);
+      setState({ ...state, panel, panel_props: {...state.panel_props, [panel]: panel_props} });
     });
   }, [state.panel]);
 
@@ -28,7 +30,7 @@ function Root() {
     <>
       { panels.filter(v => v.name == state.panel).map(panel => (
         <div key={panel.name} className={cs("panel", state.panel == panel.name ? "active" : "inactive")}>
-          {React.createElement(panel.component)}
+          {React.createElement(panel.component, state.panel_props[panel.name])}
         </div>
       ))
       }

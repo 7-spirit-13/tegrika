@@ -44,6 +44,9 @@ export class GamePlay {
    */
   game_engine = null;
 
+  /** @public @type {function(Array<number>)} */
+  on_update_coords = null;
+
   /**
    * @param {boolean} training training mode
    * @param {boolean} retina_ready training mode
@@ -140,10 +143,23 @@ export class GamePlay {
           Transform.setPosition(...limitCoords(cp));
           Renderer.stroke_color = '#22ff22';
         }
+
+        if (this.on_update_coords !== null) {
+          this.on_update_coords(Transform.getPosition());
+        }
       } else {
         Renderer.stroke_color = '#333333';
       }
     }
+  }
+
+  /**
+   * @param {number} x
+   * @param {number} y
+   * @returns {void}
+   */
+  updateOpponentPosition(x, y) {
+    GE.Utils.getTransform(this.other_ball).setPosition(x, y);
   }
 
   start() {
