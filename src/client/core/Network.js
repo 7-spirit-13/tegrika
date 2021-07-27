@@ -24,8 +24,30 @@ export default function Network(self) {
 
   this.connectWS = (clb) => {
     this.ws = io(`ws${location.protocol == 'https:' ? 's' : ''}://${location.hostname}:${location.port}`);
-    this.ws.on("connect", () => {
-      self.Event.dispatchEvent(Events.WS_CONNECTED);
+    this.ws.on("connect", (data) => {
+      const clb = (data) => {
+        this.ws.off("authorization", clb);
+        if (data.msg == "success") {
+          self.Event.dispatchEvent(Events.WS_CONNECTED);
+        } else {
+          throw new EvalError("Error when receiving data from server");
+        }
+      }
+      this.ws.emit("authorization").on("authorization", clb);
+    })
+  }
+
+  this.findOpponent = () => {
+    return new Promise((resolve, reject) => {
+      const clb = data => {
+        if (data.msg == 'success') {
+          resolve(data);
+        } else {
+          reject();
+        }
+        this.ws.off("find-me-an-opponent", clb);
+      }
+      this.ws.emit("find-me-an-opponent").on("find-me-an-opponent", clb);
     });
   }
 }
