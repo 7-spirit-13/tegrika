@@ -9,16 +9,28 @@ import { Events } from '../core/Constants';
 import { GamePlay } from '../gameplay';
 import { isIphone } from '../core/Utils';
 
-function GamePanel() {
+/**
+ * 
+ * @param {*} props 
+ * @returns 
+ */
+function GamePanel(props) {
   /** @type {React.Ref<HTMLCanvasElement>} */
   const canvasRef = React.createRef(null);
   const [game] = React.useState(new GamePlay(false, true));
 
   React.useLayoutEffect(() => {
     const canvas = canvasRef.current;
-
+    console.log(props);
     game.setCanvas(canvas);
     game.start();
+    game.onUpdateCoords = (coords) => {
+      Core.Network.sendCoords(props.id_room, coords);
+    }
+
+    Core.Network.listenCoords((data) => {
+      console.log(data);
+    })
 
     const _isIphone = isIphone();
 

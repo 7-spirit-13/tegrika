@@ -58,4 +58,18 @@ export default function Network(self) {
       this.ws.emit("find-me-an-opponent").on("find-me-an-opponent", clb);
     });
   }
+
+  this.sendCoords = (id_room, [x, y]) => {
+    this.ws.emit("send-coordinates-here", { id_room, x, y });
+  }
+
+  this.listenCoords = (clb) => {
+    let _clb = (data) => {
+      clb(data);
+    }
+
+    this.ws.on("coordinates-opponent", _clb);
+
+    return () => this.ws.off("coordinates-opponent", _clb);
+  }
 }
