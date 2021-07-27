@@ -149,6 +149,7 @@ function check_contact(id_room) {
       distance_between_objects = Math.sqrt(X_user1 * X_user2 + Y_user1 * Y_user2)
       if(radius * 2 > distance_between_objects){
         // Соприкосновение
+        console.log('Соприкосновение в комнате №'+id_room) 
         scope[i].contact += 10 // добавляю 10 миллисикунд, если контакт устанолвен. 
         // Если наберётся 5000, стоп игра
         if(scope[i].contact >= 5000){
@@ -182,6 +183,7 @@ io.on('connection', socket => {
 
   socket.on('authorization', user_id => {
     // Подключение нового пользователя. Когда он открыл игру
+    console.log('Подключился игрок с id: ', socket.id)
     users.push({ id: [socket.id], status: '' })
     return socket.emit('authorization', { msg: 'success', id: socket.id })
     // Получив ответ нужно вызвать find-me-an-opponent
@@ -191,6 +193,7 @@ io.on('connection', socket => {
   socket.on('disconnect', () => {
     for (let i = 0; i < users.length; i++) {
       if (users[i].id == socket.id) {
+        console.log('Игрок с id: ', socket.id, ' покинул игру')
         users = remove(users, i)
       }
     }
@@ -198,6 +201,7 @@ io.on('connection', socket => {
 
   socket.on('find-me-an-opponent', data => {
     // Здесь обозначаем статус, что игрок в поиске соперника.
+    console.log('Игрок id:'+socket.id+' в поиске соперника', )
     for(let i = 0; i < users.length; i++){
       if(socket.id == users[i].id) {
         users[i].status = 'search'
