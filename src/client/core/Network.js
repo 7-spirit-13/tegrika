@@ -24,8 +24,40 @@ export default function Network(self) {
 
   this.connectWS = (clb) => {
     this.ws = io(`ws${location.protocol == 'https:' ? 's' : ''}://${location.hostname}:${location.port}`);
-    this.ws.on("connect", () => {
-      self.Event.dispatchEvent(Events.WS_CONNECTED);
+    this.ws.on("connect", (data) => {
+      const clb = (data) => {
+        this.ws.off("authorization", clb);
+        if (data.msg == "success") {
+          self.Event.dispatchEvent(Events.WS_CONNECTED);
+        } else {
+          throw new EvalError("Error when receiving data from server");
+        }
+      }
+      this.ws.emit("authorization").on("authorization", clb);
+    })
+  }
+
+  this.findOpponent = () => {
+    return new Promise((resolve, reject) => {
+      let clb = data => {
+        // Deleting old
+        this.ws.off("find-me-an-opponent", clb);
+
+        if (data.msg == 'success') {
+          clb = (data) => {
+          // Deleting old callback
+            this.ws.off("start-playing", clb);
+
+            console.log(data);
+            resolve(data);
+          }
+
+          this.ws.on("start-playing", clb);
+        } else {
+          reject("find-me-an-opponent error");
+        }
+      }
+      this.ws.emit("find-me-an-opponent").on("find-me-an-opponent", clb);
     });
   }
 }
