@@ -17,7 +17,7 @@ export class Touch extends Component {
   _mouse_move_clb = null;
 
   /** @private @type {function} */
-  _mouse_start_clb = null;
+  _mouse_down_clb = null;
 
   /** @private @type {function} */
   _mouse_end_clb = null;
@@ -84,7 +84,7 @@ export class Touch extends Component {
     });
 
     if (with_mouse) {
-      this.gameObject.scene.game_engine.canvas.addEventListener("mousedown", this._mouse_start_clb = (ev) => {
+      this.gameObject.scene.game_engine.canvas.addEventListener("mousedown", this._mouse_down_clb = (ev) => {
         const coords = this._getResultCoords(ev.clientX, ev.clientY);
         if (this.collider.hasPoint(...coords)) {
           this.touched = true;
@@ -162,5 +162,11 @@ export class Touch extends Component {
    */
   destroy() {
     const canvas = this.gameObject.scene.game_engine.canvas;
+    canvas.removeEventListener("touchstart", this._touch_start_clb);
+    canvas.removeEventListener("touchmove" , this._touch_move_clb );
+    canvas.removeEventListener("touchend"  , this._touch_end_clb  );
+    canvas.removeEventListener("mousedown" , this._mouse_down_clb );
+    canvas.removeEventListener("mousemove" , this._mouse_move_clb );
+    canvas.removeEventListener("mouseup"   , this._mouse_end_clb  );
   }
 }
