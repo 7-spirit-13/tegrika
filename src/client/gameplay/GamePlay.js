@@ -96,7 +96,9 @@ export class GamePlay {
     
     this.other_ball.getComponent(GE.Components.Renderers.CircleRendererInstance)
       .radius = Constants.BALL_RADIUS;
+  }
 
+  controls() {
     // Adding controls
     const cr = this.main_ball.addComponent(new GE.Components.Colliders.CircleCollider());
 
@@ -162,6 +164,7 @@ export class GamePlay {
 
     this.updateSize();
     this.initScene();
+    this.controls();
     this.reset();
 
     window.addEventListener('resize', this.updateSize.bind(this));

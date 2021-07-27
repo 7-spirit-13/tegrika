@@ -47,8 +47,6 @@ export default function Network(self) {
           clb = (data) => {
           // Deleting old callback
             this.ws.off("start-playing", clb);
-
-            console.log(data);
             resolve(data);
           }
 

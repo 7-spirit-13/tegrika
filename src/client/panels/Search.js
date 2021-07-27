@@ -25,13 +25,9 @@ function SearchPanel() {
   }
 
   React.useEffect(() => {
-    let t = 0;
     Core.Network.findOpponent().then((v) => {
-      t = setTimeout(() => {
-        Core.Event.dispatchEvent(Events.OPEN_PANEL, ['game']);
-      }, 1000);
+      Core.Event.dispatchEvent(Events.OPEN_PANEL, ['game']);
     })
-    return () => clearTimeout(t);
   });
 
   return (
