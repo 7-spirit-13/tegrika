@@ -98,7 +98,7 @@ async function creating_room(id_user_1, id_user_2){
         coordinates: [] // история перемещений игрока
       }
     ]
-  })
+  }) 
   console.log('\nКОМНАТА СОЗДАНА.\nid_room: '+id_room+'\nid_user_1: '+id_user_1+'\nid_user_2: '+id_user_2+'\n')
   // Время, во сколько начинаем игру
   let time_to_start = new Date()
