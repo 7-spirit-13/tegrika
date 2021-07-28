@@ -44,6 +44,9 @@ export class GamePlay {
    */
   game_engine = null;
 
+  /** @private @type boolean */
+  isInverse = false;
+
   /** @public @type {function(Array<number>)} */
   on_update_coords = null;
 
@@ -145,7 +148,7 @@ export class GamePlay {
         }
 
         if (this.on_update_coords !== null) {
-          this.on_update_coords(Transform.getPosition());
+          this.on_update_coords(GE.Math.Vector2.multiplyA(Transform.getPosition(), this.isInverse ? -1 : 1));
         }
       } else {
         Renderer.stroke_color = '#333333';
@@ -158,11 +161,19 @@ export class GamePlay {
    * @param {number} y
    * @returns {void}
    */
-  updateOpponentPosition(x, y) {
+  updateOpponentPosition([_x, _y]) {
+    let x = _x, y = _y;
+    
+    if (this.isInverse) {
+      x = -x;
+      y = -y;
+    }
+    
     GE.Utils.getTransform(this.other_ball).setPosition(x, y);
   }
 
-  start() {
+  start(role) {
+    this.isInverse = role == 'overtake';
     this.game_engine.start();
   }
 

@@ -59,8 +59,8 @@ export default function Network(self) {
     });
   }
 
-  this.sendCoords = (id_room, [x, y]) => {
-    this.ws.emit("send-coordinates-here", { id_room, x, y });
+  this.sendCoords = (coords) => {
+    this.ws.emit("update-coordinates", Float32Array.from(coords));
   }
 
   this.listenCoords = (clb) => {

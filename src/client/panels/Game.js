@@ -21,16 +21,15 @@ function GamePanel(props) {
 
   React.useLayoutEffect(() => {
     const canvas = canvasRef.current;
-    console.log(props);
     game.setCanvas(canvas);
-    game.start();
-    game.onUpdateCoords = (coords) => {
-      Core.Network.sendCoords(props.id_room, coords);
+    game.start(props.role);
+    game.on_update_coords = (coords) => {
+      Core.Network.sendCoords(coords);
     }
 
-    Core.Network.listenCoords((data) => {
-      console.log(data);
-    })
+    Core.Network.listenCoords((coords) => {
+      game.updateOpponentPosition(coords);
+    });
 
     const _isIphone = isIphone();
 
