@@ -159,7 +159,6 @@ io.on('connection', /** @param {SocketIO.Socket} socket */ (socket) => {
     room_name = getRandomString();
 
     let sockets = [socket, otherSocket];
-    sockets.forEach(v => v.join(room_name));
 
     // Случайным образом определяем роли
     if (Math.random() > .5)
@@ -176,7 +175,13 @@ io.on('connection', /** @param {SocketIO.Socket} socket */ (socket) => {
       end_time: GAME_DURATION,            // Time when game will be ended
       last_touching_check_time: 0,        // Last checking of touching time
       touching_time: 0,                   // Total touching time
-      coordinates: [MAP_WIDTH / 2 - 70, -MAP_HEIGHT / 2 + 70, -MAP_WIDTH / 2 + 70, MAP_HEIGHT / 2 - 70]           // run_x, run_y, over_x, over_y
+
+      coordinates: [
+        MAP_WIDTH  / 2 - 70,    // runaway  x
+       -MAP_HEIGHT / 2 + 70,    // runaway  y
+       -MAP_WIDTH  / 2 + 70,    // overtake x
+        MAP_HEIGHT / 2 - 70     // overtake y
+      ]
     });
 
     playRoomInfo.end_time += playRoomInfo.start_time;
@@ -189,7 +194,7 @@ io.on('connection', /** @param {SocketIO.Socket} socket */ (socket) => {
       end_time:   playRoomInfo.end_time
     }));
 
-    function check_touching() {
+    function checkTouching() {
       const c = playRoomInfo.coordinates;
       const distance = Math.pow(c[0] - c[2], 2) + Math.pow(c[1] - c[3], 2);
       const deltaTime = Date.now() - playRoomInfo.last_touching_check_time;
@@ -217,11 +222,23 @@ io.on('connection', /** @param {SocketIO.Socket} socket */ (socket) => {
 
         playRoomInfo.coordinates.splice(i * 2, 2, ...opponentCoords);
 
-        if (check_touching()) {
+        if (checkTouching()) {
+          // Отправляем игрокам новое время касания
           sockets.forEach(v => v.emit('update-touching-time', playRoomInfo.touching_time));
+
+          if (playRoomInfo.touching_time > 5000) {
+            endGame("overtake");
+          }
         }
       });
     });
+
+    let timeoutID = setTimeout(() => endGame("runaway"), GAME_DURATION);
+
+    function endGame(winner) {
+      clearTimeout(timeoutID);
+      sockets.forEach(v => v.emit('eng-game', winner));
+    }
   });
 });
 
