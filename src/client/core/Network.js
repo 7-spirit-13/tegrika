@@ -63,13 +63,14 @@ export default function Network(self) {
     this.ws.emit("update-coordinates", Float32Array.from(coords));
   }
 
-  this.listenCoords = (clb) => {
+  this.listen = (eventName, clb) => {
+
     let _clb = (data) => {
       clb(data);
     }
 
-    this.ws.on("coordinates-opponent", _clb);
+    this.ws.on(eventName, _clb);
 
-    return () => this.ws.off("coordinates-opponent", _clb);
+    return () => this.ws.off(eventName, _clb);
   }
 }

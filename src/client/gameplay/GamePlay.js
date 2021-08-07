@@ -63,7 +63,12 @@ export class GamePlay {
     }
   }
 
+  init(role) {
+    this.isInverse = role == 'overtake';
+  }
+
   reset() {
+    // Начальные позиции
     this.other_ball
       .getComponent(GE.Components.TransformInstance)
       .setPosition(-Constants.MAP_WIDTH / 2 + 70, Constants.MAP_HEIGHT / 2 - 70);
@@ -72,9 +77,15 @@ export class GamePlay {
       .getComponent(GE.Components.TransformInstance)
       .setPosition(Constants.MAP_WIDTH / 2 - 70, -Constants.MAP_HEIGHT / 2 + 70);
 
-    this.other_ball
-      .getComponent(GE.Components.Renderers.CircleRendererInstance)
-      .fill_color = 'red';
+    // Установка цветов для каждого круга
+    const fill_colors = ["#2196f3", "red"];
+    if (this.isInverse) {
+      fill_colors.push(fill_colors.splice(0, 1)[0]);
+    }
+
+    [this.main_ball, this.other_ball].forEach((v, i) => {
+      v.getComponent(GE.Components.Renderers.CircleRendererInstance).fill_color = fill_colors[i];
+    });
   }
 
   updateSize() {
@@ -99,7 +110,6 @@ export class GamePlay {
     this.main_ball.getComponent(GE.Components.Renderers.CircleRendererInstance)
       .radius = Constants.BALL_RADIUS;
 
-    
     this.other_ball.getComponent(GE.Components.Renderers.CircleRendererInstance)
       .radius = Constants.BALL_RADIUS;
   }
@@ -120,10 +130,10 @@ export class GamePlay {
     let limitCoords = ([x, y]) => {
       const E_L = 7; // Extern Limitation
 
-      const L_L = -Constants.MAP_WIDTH  / 2 + Constants.BALL_RADIUS + E_L; // Left Limitation
+      const L_L = -Constants.MAP_WIDTH  / 2 + Constants.BALL_RADIUS + E_L; // Left  Limitation
       const L_R =  Constants.MAP_WIDTH  / 2 - Constants.BALL_RADIUS - E_L; // Right Limitation
-      const L_D = -Constants.MAP_HEIGHT / 2 + Constants.BALL_RADIUS + E_L; // Down Limitation
-      const L_U =  Constants.MAP_HEIGHT / 2 - Constants.BALL_RADIUS - E_L; // Up Limitation
+      const L_D = -Constants.MAP_HEIGHT / 2 + Constants.BALL_RADIUS + E_L; // Down  Limitation
+      const L_U =  Constants.MAP_HEIGHT / 2 - Constants.BALL_RADIUS - E_L; // Up    Limitation
       
       return [Math.min(Math.max(x, L_L), L_R), Math.min(Math.max(y, L_D), L_U)];
     }
@@ -172,8 +182,7 @@ export class GamePlay {
     GE.Utils.getTransform(this.other_ball).setPosition(x, y);
   }
 
-  start(role) {
-    this.isInverse = role == 'overtake';
+  start() {
     this.game_engine.start();
   }
 

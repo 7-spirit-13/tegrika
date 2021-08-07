@@ -21,14 +21,20 @@ function GamePanel(props) {
 
   React.useLayoutEffect(() => {
     const canvas = canvasRef.current;
+    game.init(props.role);
     game.setCanvas(canvas);
-    game.start(props.role);
+    game.start();
+
     game.on_update_coords = (coords) => {
       Core.Network.sendCoords(coords);
     }
 
-    Core.Network.listenCoords((coords) => {
+    let off_coords_listener = Core.Network.listen("coordinates-opponent", (coords) => {
       game.updateOpponentPosition(coords);
+    });
+
+    let off_touching_update_listener = Core.Network.listen("update-touching-time", (time) => {
+      console.log(time);
     });
 
     const _isIphone = isIphone();
@@ -37,6 +43,11 @@ function GamePanel(props) {
       canvas.width = window.innerWidth * (1 + _isIphone);
       canvas.height = window.innerHeight * (1 + _isIphone);
     })();
+
+    return () => {
+      off_coords_listener();
+      off_touching_update_listener();
+    }
   }, []);
 
   return (
