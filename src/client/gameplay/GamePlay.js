@@ -47,8 +47,17 @@ export class GamePlay {
   /** @private @type boolean */
   isInverse = false;
 
+  /** @public @type {number} */
+  touching_time = 0;
+
+  /** @public @type {boolean} */
+  have_touched = false;
+
   /** @public @type {function(Array<number>)} */
   on_update_coords = null;
+
+  /** @public @type {function(number)} */
+  on_update_touching_time = null;
 
   /**
    * @param {boolean} training training mode
@@ -137,12 +146,14 @@ export class GamePlay {
       
       return [Math.min(Math.max(x, L_L), L_R), Math.min(Math.max(y, L_D), L_U)];
     }
+
+    let last_touching_time = Date.now();
     this.main_ball.update = (delta) => {
       const Renderer = this.main_ball.getComponent(CircleRendererInstance);
-      
+      const Transform = GE.Utils.getTransform(this.main_ball);
+
       if (touch.touched) {
         const Vec2 = GE.Math.Vector2;
-        const Transform = GE.Utils.getTransform(this.main_ball);
         
         let cp = Vec2.sumA(mouse_offset, touch.current_position);
         let direction = Vec2.substractA(cp, Transform.getPosition());
@@ -162,6 +173,23 @@ export class GamePlay {
         }
       } else {
         Renderer.stroke_color = '#333333';
+
+      }
+
+      const pA = Transform.getPosition();
+      const pB = GE.Utils.getTransform(this.other_ball).getPosition();
+      if ((pA[0] - pB[0]) * (pA[0] - pB[0]) + (pA[1] - pB[1]) * (pA[1] - pB[1]) < Math.pow(Constants.BALL_RADIUS * 2, 2)) {
+        const now = Date.now();
+        if (this.have_touched) {
+          this.touching_time += now - last_touching_time;
+          this.on_update_touching_time(this.touching_time);
+        } else {
+          this.have_touched = true;
+        }
+
+        last_touching_time = now;
+      } else {
+        this.have_touched = false;
       }
     }
   }

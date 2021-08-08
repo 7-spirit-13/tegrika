@@ -23,6 +23,7 @@ function GamePanel(props) {
 
   const [status, setStatus] = React.useState(0);
   const [winner, setWinner] = React.useState(null);
+  const [beforeShown, setBeforeShown] = React.useState(true);
 
   React.useLayoutEffect(() => {
     const canvas = canvasRef.current;
@@ -34,12 +35,17 @@ function GamePanel(props) {
       Core.Network.sendCoords(coords);
     }
 
+    game.on_update_touching_time = (time) => {
+      setStatus(time / 5000);
+    }
+
     let off_coords_listener = Core.Network.listen("coordinates-opponent", (coords) => {
       game.updateOpponentPosition(coords);
     });
 
     let off_touching_update_listener = Core.Network.listen("update-touching-time", (time) => {
       setStatus(time / 5000);
+      game.touching_time = time;
     });
 
     let off_end_listener = Core.Network.listen("end-game", (winner) => {
@@ -54,6 +60,8 @@ function GamePanel(props) {
       canvas.height = height * (1 + _isIphone);
     })();
 
+    setTimeout(() => setBeforeShown(false), props.start_time - Date.now());
+
     return () => {
       off_coords_listener();
       off_touching_update_listener();
@@ -67,12 +75,20 @@ function GamePanel(props) {
         <div className="status-bar">
           <div style={{width: `${status * 100}%`}} className="fill-bar"></div>
         </div>
-        <Timer to={props.end_time}></Timer>
+        <div className="timer">
+          <Timer to={props.end_time}></Timer>
+        </div>
       </div>
 
       { winner !== null &&
         <div className="end-game">
           <h1>{winner ? "Вы победили!" : "Вы проиграли :("}</h1>
+        </div>
+      }
+
+      { beforeShown &&
+        <div className="before-start">
+          <Timer to={props.start_time} />
         </div>
       }
     </div>
