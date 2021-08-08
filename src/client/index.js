@@ -17,7 +17,6 @@ function Root() {
 
   React.useEffect(() => {
     return Core.Event.addEventListener(Events.OPEN_PANEL, (panel, panel_props) => {
-      console.log(panel_props);
       setState({ ...state, panel, panel_props: {...state.panel_props, [panel]: panel_props} });
     });
   }, [state.panel]);

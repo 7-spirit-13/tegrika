@@ -20,6 +20,7 @@ function GamePanel(props) {
   const [game] = React.useState(new GamePlay(false, true));
 
   const [status, setStatus] = React.useState(0);
+  const [winner, setWinner] = React.useState(null);
 
   React.useLayoutEffect(() => {
     const canvas = canvasRef.current;
@@ -37,6 +38,10 @@ function GamePanel(props) {
 
     let off_touching_update_listener = Core.Network.listen("update-touching-time", (time) => {
       setStatus(time / 5000);
+    });
+
+    let off_end_listener = Core.Network.listen("end-game", (winner) => {
+      setWinner(props.role == winner);
     });
 
     const _isIphone = isIphone();
@@ -61,6 +66,12 @@ function GamePanel(props) {
           <div style={{width: `${status * 100}%`}} className="fill-bar"></div>
         </div>
       </div>
+
+      { winner !== null &&
+        <div className="end-game">
+          <h1>{winner ? "Вы победили!" : "Вы проиграли :("}</h1>
+        </div>
+      }
     </div>
   );
 }

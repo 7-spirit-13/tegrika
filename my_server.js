@@ -209,12 +209,16 @@ io.on('connection', /** @param {SocketIO.Socket} socket */ (socket) => {
       return false;
     }
 
+    let touchingTimeoutID = null;
+    let killers = [];
+
     // Событие отправки координат
     sockets.forEach((socket, i) => {
       // Заранее определяем сокет оппонента
       const opponentSocket = sockets[1 - i];
 
-      socket.on('update-coordinates', /** @param {Buffer} coords */(coords) => {
+      // Колл-бэк
+      const onUpdateCoords = /** @param {Buffer} coords */(coords) => {
         let opponentCoords = [0, 0].map((v, i) => coords.readFloatLE(i * 4));
 
         // Отправляем координаты сопернику
@@ -228,16 +232,28 @@ io.on('connection', /** @param {SocketIO.Socket} socket */ (socket) => {
 
           if (playRoomInfo.touching_time > 5000) {
             endGame("overtake");
+          } else if (touchingTimeoutID === null) {
+            touchingTimeoutID = setTimeout(() => endGame("overtake"), 5000 - playRoomInfo.touching_time);
           }
+        } else if (touchingTimeoutID !== null) {
+          clearTimeout(touchingTimeoutID);
+          touchingTimeoutID = null;
         }
-      });
+      };
+
+      setTimeout(() => {
+        socket.on('update-coordinates', onUpdateCoords);
+        killers.push(() => socket.off('update-coordinates', onUpdateCoords));
+      }, playRoomInfo.start_time - Date.now());
     });
 
-    let timeoutID = setTimeout(() => endGame("runaway"), GAME_DURATION);
+    let timeoutID = setTimeout(() => endGame("runaway"), playRoomInfo.end_time - Date.now());
 
     function endGame(winner) {
       clearTimeout(timeoutID);
-      sockets.forEach(v => v.emit('eng-game', winner));
+      if (touchingTimeoutID !== null) clearTimeout(touchingTimeoutID);
+      killers.forEach(v => v());
+      sockets.forEach(v => v.emit('end-game', winner));
     }
   });
 });
