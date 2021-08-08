@@ -229,6 +229,7 @@ io.on('connection', /** @param {SocketIO.Socket} socket */ (socket) => {
         if (checkTouching()) {
           // Отправляем игрокам новое время касания
           sockets.forEach(v => v.emit('update-touching-time', playRoomInfo.touching_time));
+          console.log(playRoomInfo.touching_time);
 
           if (playRoomInfo.touching_time > 5000) {
             endGame("overtake");

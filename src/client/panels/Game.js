@@ -9,6 +9,8 @@ import { Events } from '../core/Constants';
 import { GamePlay } from '../gameplay';
 import { isIphone } from '../core/Utils';
 
+import Timer from '../ui/Timer';
+
 /**
  * 
  * @param {*} props 
@@ -65,6 +67,7 @@ function GamePanel(props) {
         <div className="status-bar">
           <div style={{width: `${status * 100}%`}} className="fill-bar"></div>
         </div>
+        <Timer to={props.end_time}></Timer>
       </div>
 
       { winner !== null &&
