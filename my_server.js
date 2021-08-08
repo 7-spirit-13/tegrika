@@ -191,7 +191,8 @@ io.on('connection', /** @param {SocketIO.Socket} socket */ (socket) => {
     sockets.forEach((v, i) => v.emit("start-playing", {
       role: (i ? "overtake" : "runaway"),
       start_time: playRoomInfo.start_time,
-      end_time:   playRoomInfo.end_time
+      end_time:   playRoomInfo.end_time,
+      server_utc: Date.now()
     }));
 
     function checkTouching() {
@@ -229,7 +230,6 @@ io.on('connection', /** @param {SocketIO.Socket} socket */ (socket) => {
         if (checkTouching()) {
           // Отправляем игрокам новое время касания
           sockets.forEach(v => v.emit('update-touching-time', playRoomInfo.touching_time));
-          console.log(playRoomInfo.touching_time);
 
           if (playRoomInfo.touching_time > 5000) {
             endGame("overtake");

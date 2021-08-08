@@ -15,3 +15,13 @@ export function cs(...classes) {
 export function isIphone() {
   return (/iPhone|iPad|iPod/i).test(window.navigator.userAgent) || true;
 }
+
+let time_offset = 0;
+
+export function getUTC() {
+  return Date.now() + time_offset;
+};
+
+export function setUTC(utc) {
+  time_offset = utc - Date.now();
+}

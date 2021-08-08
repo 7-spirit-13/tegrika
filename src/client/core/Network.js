@@ -1,6 +1,7 @@
 import { Core } from './Core';
 import { Socket, io } from 'socket.io-client';
 import { Events } from './Constants';
+import * as Utils from './Utils';
 
 /**
  * @param {Core} self
@@ -47,6 +48,9 @@ export default function Network(self) {
           clb = (data) => {
           // Deleting old callback
             this.ws.off("start-playing", clb);
+            const offset = data.server_utc - Date.now();
+            data.start_time += offset;
+            data.end_time += offset;
             resolve(data);
           }
 
