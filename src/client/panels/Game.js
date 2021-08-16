@@ -9,6 +9,8 @@ import { Events } from '../core/Constants';
 import { GamePlay } from '../gameplay';
 import { isIphone } from '../core/Utils';
 
+import * as GameConstants from '../gameplay/constants';
+
 import Timer from '../ui/Timer';
 
 /**
@@ -24,6 +26,9 @@ function GamePanel(props) {
   const [status, setStatus] = React.useState(0);
   const [winner, setWinner] = React.useState(null);
   const [beforeShown, setBeforeShown] = React.useState(true);
+
+  /** @type {React.Ref<HTMLDivElement} */
+  const beforeStartRef = React.createRef(null);
 
   React.useLayoutEffect(() => {
     const canvas = canvasRef.current;
@@ -68,6 +73,18 @@ function GamePanel(props) {
     }
   }, []);
 
+  React.useLayoutEffect(() => {
+    if (!beforeShown) return;
+
+    // Меняем размер стартового экрана
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+
+    const z = Math.min((w - 20) / GameConstants.MAP_WIDTH, (h - 30) / GameConstants.MAP_HEIGHT);
+    beforeStartRef.current.style.width  = `${GameConstants.MAP_WIDTH  * z}px`;
+    beforeStartRef.current.style.height = `${GameConstants.MAP_HEIGHT * z}px`;
+  }, [beforeShown]);
+
   return (
     <div className="game-panel">
       <canvas ref={ canvasRef } />
@@ -76,7 +93,7 @@ function GamePanel(props) {
           <div style={{width: `${status * 100}%`}} className="fill-bar"></div>
         </div>
         <div className="timer">
-          <Timer to={props.end_time}></Timer>
+          <Timer to={props.end_time} mode={Timer.Modes.MinSec}></Timer>
         </div>
       </div>
 
@@ -87,8 +104,17 @@ function GamePanel(props) {
       }
 
       { beforeShown &&
-        <div className="before-start">
-          <Timer to={props.start_time} />
+        <div className="before-start-wrapper">
+          <div ref={beforeStartRef} className="before-start">
+            <div className="timer">
+              <Timer to={props.start_time} />
+            </div>
+            <div className="description">
+              <h3>Вы - { props.role == 'overtake' ? 'охотник' : 'жертва'}</h3>
+              <span className="descr-text">Ваша задача: {props.role == 'overtake' ? 'соприкасаться с противником до тех пор, пока ползунок не дойдёт до конца' : 'избегать соприкосновения с противником'}</span>
+              <span className="descr-text">Ограничение по времени: 1 минута</span>
+            </div>
+          </div>
         </div>
       }
     </div>

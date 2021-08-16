@@ -171,7 +171,7 @@ io.on('connection', /** @param {SocketIO.Socket} socket */ (socket) => {
     const playRoomInfo = ({
       overtake: sockets[0],               // Socket with overtake player
       runaway:  sockets[1],               // Socket with runaway  player
-      start_time: Date.now() + 3000,      // Game started time
+      start_time: Date.now() + 5000,      // Game started time
       end_time: GAME_DURATION,            // Time when game will be ended
       last_touching_check_time: 0,        // Last checking of touching time
       touching_time: 0,                   // Total touching time

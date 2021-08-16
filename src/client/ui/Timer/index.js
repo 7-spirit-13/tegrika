@@ -1,16 +1,21 @@
 import React from 'react';
 
+const Modes = {
+  Sec: 1,
+  MinSec: 2
+};
+
 /**
  * 
  * @param {object} props
  * @param {number} props.to
- * @param {React.FunctionComponent} props.wrapper
+ * @param {number} mode
  * @returns 
  */
 export default function Timer(props) {
-  const Wrapper = props.wrapper || (({children}) => <>{children}</>);
 
   const [timeLeft, setTimeLeft] = React.useState(Math.ceil((props.to - Date.now()) / 1000));
+  const mode = props.mode || Modes.Sec;
 
   React.useLayoutEffect(() => {
     if (timeLeft == 0) return;
@@ -27,6 +32,11 @@ export default function Timer(props) {
   }, [timeLeft]);
 
   return (
-    <Wrapper>{timeLeft}</Wrapper>
+    <>
+      {mode == Modes.Sec && <>{timeLeft}</>}
+      {mode == Modes.MinSec && <>{parseInt(timeLeft / 60)}:{timeLeft % 60}</>}
+    </>
   );
 }
+
+Timer.Modes = Modes;
