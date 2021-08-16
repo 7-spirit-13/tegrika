@@ -5,6 +5,11 @@ const Modes = {
   MinSec: 2
 };
 
+function with0(num, digits_count=2) {
+  const s_num = num.toString();
+  return "0".repeat(digits_count - s_num.length).concat(s_num);
+}
+
 /**
  * 
  * @param {object} props
@@ -34,7 +39,7 @@ export default function Timer(props) {
   return (
     <>
       {mode == Modes.Sec && <>{timeLeft}</>}
-      {mode == Modes.MinSec && <>{parseInt(timeLeft / 60)}:{timeLeft % 60}</>}
+      {mode == Modes.MinSec && <>{parseInt(timeLeft / 60)}:{with0(timeLeft % 60, 2)}</>}
     </>
   );
 }
