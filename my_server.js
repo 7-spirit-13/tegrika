@@ -134,8 +134,16 @@ io.on('connection', /** @param {SocketIO.Socket} socket */ (socket) => {
     if (i !== -1) waiting_sockets.splice(i, 1);
   });
 
+  socket.on('cancel', () => {
+    if (waiting_sockets.includes(socket)) {
+      waiting_sockets.splice(waiting_sockets.indexOf(socket), 1);
+    }
+  })
+
   // Событие поиска соперника
   socket.on('find-me-an-opponent', data => {
+    if (waiting_sockets.includes(socket)) return ;
+
     // Логирование
     LOG && console.log(`Socket ${socket.id} is waiting opponent`);
 

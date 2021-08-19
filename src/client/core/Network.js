@@ -3,6 +3,11 @@ import { Socket, io } from 'socket.io-client';
 import { Events } from './Constants';
 import * as Utils from './Utils';
 
+const IN_BROWSER = typeof location !== 'undefined' && location.hostname.length !== 0;
+const HOST_NAME = IN_BROWSER ? location.hostname : '7-spirit-13.online';
+const PORT = IN_BROWSER ? location.port : 443;
+const PROTO_POSTFIX = IN_BROWSER && location.protocol === 'http:' ? '' : 's';
+
 /**
  * @param {Core} self
  */
@@ -13,7 +18,7 @@ export default function Network(self) {
   this.requestAPI = (params) => {
     // const seed = Math.random().toString(36).slice(2);
     // const secret = sha256.hmac(API_KEY, seed);
-    return fetch('/api', {
+    return fetch(`http${PROTO_POSTFIX}://${HOST_NAME}:${PORT}/api`, {
       method: 'POST',
       // body: JSON.stringify({ ...params, uid: UID, secret, seed }),
       body: JSON.stringify({ ...params }),
@@ -24,18 +29,20 @@ export default function Network(self) {
   }
 
   this.connectWS = (clb) => {
-    this.ws = io(`ws${location.protocol == 'https:' ? 's' : ''}://${location.hostname}:${location.port}`);
+    this.ws = io(`ws${PROTO_POSTFIX}://${HOST_NAME}:${PORT}`);
     this.ws.on("connect", (data) => {
+      console.log('websocket connected');
       const clb = (data) => {
         this.ws.off("authorization", clb);
         if (data.msg == "success") {
+          console.log("websocket connection established");
           self.Event.dispatchEvent(Events.WS_CONNECTED);
         } else {
           throw new EvalError("Error when receiving data from server");
         }
       }
       this.ws.emit("authorization").on("authorization", clb);
-    })
+    });
   }
 
   this.findOpponent = () => {
@@ -65,6 +72,10 @@ export default function Network(self) {
 
   this.sendCoords = (coords) => {
     this.ws.emit("update-coordinates", Float32Array.from(coords));
+  }
+
+  this.cancel = () => {
+    this.ws.emit("cancel");
   }
 
   this.listen = (eventName, clb) => {

@@ -11,7 +11,7 @@ import React from 'react';
  */
 function Button(props) {
   return (
-    <div onClick={ props.onClick } className={`Button s-${props.size} c-${props.color ?? "primary"}`}>
+    <div onClick={ props.onClick } className={`Button s-${props.size ?? "medium"} c-${props.color ?? "primary"}`}>
       {props.children}
     </div>
   )

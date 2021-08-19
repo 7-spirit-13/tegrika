@@ -2,7 +2,6 @@
   box-sizing: border-box;
   background: #9cdc39;
   font-family: Roboto;
-  height: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -11,6 +10,11 @@
   cursor: pointer;
   user-select: none;
   padding: 0 30px;
+}
+
+.Button.s-medium {
+  height: 40px;
+  font-size: 14pt;
   min-width: 180px;
 }
 

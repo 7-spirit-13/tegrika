@@ -57,7 +57,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
   font-size: 25pt;
+
+  & > h1 {
+    margin-bottom: 100px;
+  }
 }
 
 .before-start-wrapper {
@@ -125,5 +130,17 @@
         }
       }
     }
+  }
+}
+
+h1 {
+  font-size: 2rem;
+
+  @media (max-width: 700px) {
+    font-size: 1.5rem;
+  }
+
+  @media (max-width: 450px) {
+    font-size: 1.2rem;
   }
 }

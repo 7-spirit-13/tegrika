@@ -21,6 +21,7 @@ function SearchAnimated() {
 
 function SearchPanel() {
   function onCancel() {
+    Core.Network.cancel();
     Core.Event.dispatchEvent(Events.OPEN_PANEL, ['main']);
   }
 

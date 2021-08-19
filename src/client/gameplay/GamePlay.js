@@ -40,6 +40,12 @@ export class GamePlay {
 
   /**
    * @private
+   * @callback
+   */
+  resizeListener = null;
+
+  /**
+   * @private
    * @type {GE.GameEngine}
    */
   game_engine = null;
@@ -232,5 +238,12 @@ export class GamePlay {
     this.reset();
 
     window.addEventListener('resize', this.updateSize.bind(this));
+  }
+
+  destroy() {
+    if (this.resizeListener != null)
+      window.removeEventListener('resize', this.resizeListener);
+
+      this.game_engine.pause();
   }
 }

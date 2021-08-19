@@ -11,6 +11,8 @@ import { isIphone } from '../core/Utils';
 
 import * as GameConstants from '../gameplay/constants';
 
+import Button from '../ui/Button';
+
 import Timer from '../ui/Timer';
 
 /**
@@ -65,11 +67,15 @@ function GamePanel(props) {
       canvas.height = height * (1 + _isIphone);
     })();
 
-    setTimeout(() => setBeforeShown(false), props.start_time - Date.now());
+    const end_timeout = setTimeout(() => setBeforeShown(false), props.start_time - Date.now());
 
     return () => {
       off_coords_listener();
       off_touching_update_listener();
+      off_end_listener();
+      window.onresize = null;
+      clearTimeout(end_timeout);
+      game.destroy();
     }
   }, []);
 
@@ -84,6 +90,12 @@ function GamePanel(props) {
     beforeStartRef.current.style.width  = `${GameConstants.MAP_WIDTH  * z}px`;
     beforeStartRef.current.style.height = `${GameConstants.MAP_HEIGHT * z}px`;
   }, [beforeShown]);
+
+  function openPanel(name) {
+    return () => {
+      Core.Event.dispatchEvent(Events.OPEN_PANEL, [name]);
+    }
+  }
 
   return (
     <div className="game-panel">
@@ -100,6 +112,8 @@ function GamePanel(props) {
       { winner !== null &&
         <div className="end-game">
           <h1>{winner ? "Вы победили!" : "Вы проиграли :("}</h1>
+          <Button onClick={openPanel("search")}>Играть снова</Button>
+          <Button onClick={openPanel("main")} size="small" color="secondary">Главное меню</Button>
         </div>
       }
 
