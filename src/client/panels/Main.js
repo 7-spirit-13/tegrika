@@ -22,7 +22,7 @@ function PreloadPanel() {
         <div className="ball ball-2"></div>
       </div>
       <Button onClick={openPanel("search")}>Начать играть</Button>
-      <Button onClick={openPanel("learning")} size="small" color="secondary">Обучение</Button>
+      {/* <Button onClick={openPanel("learning")} size="small" color="secondary">Обучение</Button> */}
     </div>
   )
 }

@@ -4,7 +4,7 @@ const expressStaticGzip = require("express-static-gzip");
 const SocketIO = require('socket.io');
 
 // Логирование
-const LOG = true;
+const LOG = false;
 
 // -------------------------------------------------------------- //
 // --------------< Настройка и запуск веб-сервера >-------------- //

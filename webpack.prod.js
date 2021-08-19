@@ -1,5 +1,5 @@
 const CompressionPlugin = require('compression-webpack-plugin');
-// const BrotliPlugin = require('brotli-webpack-plugin');
+const BrotliPlugin = require('brotli-webpack-plugin');
 const webpack = require('webpack');
 const path = require('path');
 
@@ -28,26 +28,36 @@ module.exports = {
         }
       },
       {
-        test: /.s[ac]ss$/,
+        test: /\.s[ac]ss$/,
         use: [
           'style-loader',
-          'css-loader',
-          'sass-loader'
+          {
+            loader: 'css-loader',
+            options: {
+              url: false
+            }
+          },
+          'sass-loader',
         ]
       },
       {
-        test: /.css$/,
+        test: /\.css$/,
         use: [
           'style-loader',
-          'css-loader'
+          {
+            loader: 'css-loader',
+            options: {
+              url: false
+            }
+          }
         ]
       },
-      {
-        test: /\.(eot|gif|svg|ttf|woff|woff2|jpg)$/,
-        use: [
-          'url-loader'
-        ]
-      }
+      // {
+      //   test: /\.(eot|gif|svg|ttf|woff|woff2|jpg)$/,
+      //   use: [
+      //     'url-loader'
+      //   ]
+      // }
     ]
   },
   plugins: [
@@ -57,11 +67,11 @@ module.exports = {
       threshold: 10240,
       minRatio: 0.8,
     }),
-    // new BrotliPlugin({
-    //   test: /\.js$|\.css$/,
-    //   threshold: 10240,
-    //   minRatio: 0.8,
-    // }),
+    new BrotliPlugin({
+      test: /\.js$|\.css$/,
+      threshold: 10240,
+      minRatio: 0.8,
+    }),
     new webpack.optimize.ModuleConcatenationPlugin(),
   ],
   resolve: {
